@@ -6,8 +6,13 @@
 This repository showcases an advanced weather forecast application, demonstrating proficiency in modern JavaScript, API integration, and dynamic content rendering.
 
 ## Project: Weather Forecast Application
-
 An interactive web application that provides detailed weather forecasts based on user-input zip codes.
+
+## Installation
+* Clone this repository.
+* Run, <code>npm update</code>
+* To view any build errors/warnings run, <code>npm run build</code>
+* To view the project run, <code>npm run watch</code>
 
 ### Key Features:
 - Fetch location data based on zip code input
