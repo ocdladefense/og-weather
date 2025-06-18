@@ -1,7 +1,6 @@
-// same as previous lab
-import './general';
+
 // without this I get an error at runtime.  babel 7 and preset env.
-const regeneratorRuntime = require("regenerator-runtime");
+// const regeneratorRuntime = require("regenerator-runtime");
 
 // my ES6 modules export functions that you need
 // parseForecast is the ONLY export (default) from weatherParsing.js
