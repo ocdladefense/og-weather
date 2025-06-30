@@ -1,49 +1,55 @@
+// Function that finds the closest hour match, because a match isn't always gonna be there since data is only given every 3 hours.
 function findTempAtHourApprox(forecast, hour, timezoneOffset) {
-  // finds the closest hour match, because a match isn't always gonna be there since data is only given every 3 hours.
   let closestEntry = null;
   let closestDiff = 24; // max hours in a day. Used to track the smallest difference between forecast hour and target hour.
+
   for (const f of forecast) {
-    const localHour = new Date((f.dt + timezoneOffset) * 1000).getHours(); // get users local hours
-    const diff = Math.abs(localHour - hour); // uses abs so there's no negatives.
-    // If you're looking for 6 AM and this forecast is for 2 AM → |2 - 6| = 4
+    const localHour = new Date((f.dt + timezoneOffset) * 1000).getHours();
+    const diff = Math.abs(localHour - hour);
     if (diff < closestDiff) {
       // If this is the closest match so far, remember it
       closestDiff = diff;
       closestEntry = f;
     }
   }
+
   return closestEntry ? closestEntry.main.temp : null;
   // returns the entry closest to the desried time.
-  // If nothing is found return null
 }
 
+// Function that finds the minimum temp in a forecast array.
 function findMinTemp(forecast) {
   return Math.min(...forecast.map((f) => f.main.temp_min));
   // Loop through every forecast entry, extract its temp_min, and return the smallest one
 }
 
+// Function that finds the maximum temp in a forecast array.
 function findMaxTemp(forecast) {
   return Math.max(...forecast.map((f) => f.main.temp_max));
-  // Math.max returns the highest value found
 }
 
-export default function parseForecast(forecast, timezoneOffset) {
-  let simpleForecast = new Array(); //initialize array
+// Function that returns a date object in the users local time
+function groupByFullDate(entry) {
+  let timezoneOffset = entry.timezone || 0; // Default to 0 if no timezone is provided
+  const local = (entry.dt + timezoneOffset) * 1000; // Shift to forecast location’s local time
+  const date = new Date(local);
 
-  // Object.groupBy loops through each item in forecast
-  // Groups entries by local day
-  const GROUPS = Object.groupBy(forecast, (entry) => {
-    const LOCAL_TIMESTAMP = (entry.dt + timezoneOffset) * 1000; // Shift to forecast location’s local time
-    const DATE = new Date(LOCAL_TIMESTAMP);
-    const LOCAL_YEAR = DATE.getFullYear();
-    const LOCAL_MONTH = String(DATE.getMonth() + 1).padStart(2, "0"); //Months are 0-indexed, so + 1 to get the correct month
-    const LOCAL_DAY = String(DATE.getDate()).padStart(2, "0"); // 2 for two characters long. "0" so 3 => 03
-    return `${LOCAL_YEAR}-${LOCAL_MONTH}-${LOCAL_DAY}`; // Format: YYYY-MM-DD
-    // Separates forecast entries into keys. All entries from June 26th, 2025 are grouped under key "2025-06-26"
-    // Each value is an array of 8 forecast entries for one day (3-hour intervals)
-  });
-  console.log(GROUPS);
+  return getAsFullDateString(date);
+}
 
+// Function that converts a js date object into a string.
+function getAsFullDateString(date) {
+  let year = date.getFullYear();
+  let month = String(date.getMonth() + 1).padStart(2, "0");
+  let day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`; // Format: YYYY-MM-DD
+}
+
+// Function that finds the 5 forcast days to display to the user.
+function getDateKeysToUse(numDays = 5, startDate = new Date()) {
+  //
+  /*
   const CURRENT_UTC = Math.floor(Date.now() / 1000); // now in seconds
   const LOCAL_NOW = new Date((CURRENT_UTC + timezoneOffset) * 1000);
 
@@ -62,39 +68,107 @@ export default function parseForecast(forecast, timezoneOffset) {
     });
     if (startIndex === -1) startIndex = 0; // fallback to first index if all else fails
   }
-  const DATE_KEYS_TO_USE = SORTED_KEYS.slice(startIndex, startIndex + 5); // get 5 days
+
+  return SORTED_KEYS.slice(startIndex, startIndex + 5); // get 5 days */
+
+  return ["2025-06-28", "2025-06-29", "2025-06-30", "2025-07-01", "2025-07-02"];
+}
+
+// Class that
+class ForecastCollection {
+  #forecast = {};
+
+  constructor(forecast, timezoneOffset) {
+    this.#forecast = Object.groupBy(forecast, groupByFullDate);
+    this.timezoneOffset = timezoneOffset;
+  }
+
+  getForecast(dateString) {
+    return new Forecast(this.#forecast[dateString] || [], this.timezoneOffset);
+  }
+}
+
+// Class that
+class Forecast {
+  /// i.e., the forecast for a single day, takes in a collection of samples.
+
+  constructor(samples, timezoneOffset) {
+    this.samples = samples;
+    this.timezoneOffset = timezoneOffset;
+  }
+
+  // You need to be able to articulate the problem you are trying to solve and how your code solves it.
+  // This function finds the forecast entry closest to noon (12:00 PM) or uses
+  // the 5th entry in the list (which is likely around midday) or defaults... do better on this, i.e., take in a time and search for that.
+  findSomethingClose(hourToLookFor) {
+    // Step 1: Find the closest entry to the specified hour
+    let closestEntry = null;
+    let closestDiff = 24; // max possible diff in hours
+
+    for (const f of this.samples) {
+      const localHour = new Date(
+        (f.dt + this.timezoneOffset) * 1000
+      ).getHours();
+      const diff = Math.abs(localHour - hourToLookFor);
+      if (closestEntry === null || diff < closestDiff) {
+        closestDiff = diff;
+        closestEntry = f;
+      }
+    }
+
+    // Step 2: Fallbacks in case of empty data
+    return closestEntry || this.samples[4] || this.samples[0] || null;
+  }
+
+  getForecast() {
+    let oneDay = {}; // Create a new object to hold the day's forecast
+
+    let noonEntry = this.findSomethingClose(12);
+
+    oneDay.dt = new Date((noonEntry.dt + this.timezoneOffset) * 1000);
+    oneDay.temp = noonEntry.main.temp;
+    oneDay.minTemp = findMinTemp(this.samples);
+    oneDay.maxTemp = findMaxTemp(this.samples);
+    oneDay.morningTemp = findTempAtHourApprox(
+      this.samples,
+      6,
+      this.timezoneOffset
+    );
+    oneDay.dayTemp = findTempAtHourApprox(
+      this.samples,
+      12,
+      this.timezoneOffset
+    );
+    oneDay.eveningTemp = findTempAtHourApprox(
+      this.samples,
+      18,
+      this.timezoneOffset
+    );
+    oneDay.nightTemp = findTempAtHourApprox(
+      this.samples,
+      21,
+      this.timezoneOffset
+    );
+    oneDay.description = noonEntry.weather?.[0]?.description ?? "";
+    oneDay.icon = noonEntry.weather?.[0]?.icon ?? "";
+    oneDay.pressure = noonEntry.main.pressure ?? null;
+    oneDay.wind = noonEntry.wind.speed ?? null;
+    oneDay.humidity = noonEntry.main.humidity ?? null;
+
+    return oneDay;
+  }
+}
+
+export default function parseForecast(forecast, timezoneOffset) {
+  let simpleForecast = new Array(); //initialize array
+
+  const GROUPS = new ForecastCollection(forecast, timezoneOffset);
 
   //Iterates through each dateKey
-  for (const DATE_KEY of DATE_KEYS_TO_USE) {
-    const ENTRIES = GROUPS[DATE_KEY];
-    //ENTRIES holds the forecast entries for one day (up to 8 entries per day from OpenWeatherMap).
+  for (const DATE_KEY of getDateKeysToUse(5, forecast, timezoneOffset)) {
+    const day = GROUPS.getForecast(DATE_KEY);
 
-    let oneDay = { DATE_KEY };
-    // initialize oneDay object with the current Key
-
-    const NOONENTRY =
-      ENTRIES.find(
-        (f) => new Date((f.dt + timezoneOffset) * 1000).getHours() === 12
-      ) ||
-      //First choice: Find the forecast object for noon (12:00 PM)
-      ENTRIES[4] ||
-      //Second choice: Use the 5th entry in the list (entries[4]) — which is likely around midday, since forecasts are spaced every 3 hours.
-      ENTRIES[0];
-    //Last choice: Just use the first forecast of the day (entries[0]).
-
-    oneDay.dt = new Date((NOONENTRY.dt + timezoneOffset) * 1000);
-    oneDay.temp = NOONENTRY.main.temp;
-    oneDay.minTemp = findMinTemp(ENTRIES);
-    oneDay.maxTemp = findMaxTemp(ENTRIES);
-    oneDay.morningTemp = findTempAtHourApprox(ENTRIES, 6, timezoneOffset);
-    oneDay.dayTemp = findTempAtHourApprox(ENTRIES, 12, timezoneOffset);
-    oneDay.eveningTemp = findTempAtHourApprox(ENTRIES, 18, timezoneOffset);
-    oneDay.nightTemp = findTempAtHourApprox(ENTRIES, 21, timezoneOffset);
-    oneDay.description = NOONENTRY.weather?.[0]?.description ?? "";
-    oneDay.icon = NOONENTRY.weather?.[0]?.icon ?? "";
-    oneDay.pressure = NOONENTRY.main.pressure ?? null;
-    oneDay.wind = NOONENTRY.wind.speed ?? null;
-    oneDay.humidity = NOONENTRY.main.humidity ?? null;
+    let oneDay = day.getForecast(); // Create a new Forecast object for the day
 
     simpleForecast.push(oneDay);
   }
