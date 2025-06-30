@@ -46,32 +46,37 @@ function getAsFullDateString(date) {
   return `${year}-${month}-${day}`; // Format: YYYY-MM-DD
 }
 
-// Function that finds the 5 forcast days to display to the user.
-function getDateKeysToUse(numDays = 5, startDate = new Date()) {
-  //
-  /*
-  const CURRENT_UTC = Math.floor(Date.now() / 1000); // now in seconds
-  const LOCAL_NOW = new Date((CURRENT_UTC + timezoneOffset) * 1000);
+// Returns local time for the users location
+function getLocalTime(timezoneOffset) {
+  let currentUTC = Math.floor(Date.now() / 1000); // now in seconds
+  let localNow = new Date((currentUTC + timezoneOffset) * 1000);
 
-  const TODAY_KEY = `${LOCAL_NOW.getFullYear()}-${String(
-    LOCAL_NOW.getMonth() + 1
-  ).padStart(2, "0")}-${String(LOCAL_NOW.getDate()).padStart(2, "0")}`;
+  return localNow;
+}
 
-  const SORTED_KEYS = Object.keys(GROUPS).sort();
+function getSortedDateKeys(forecast) {
+  let grouped = Object.groupBy(forecast, groupByFullDate);
 
-  let startIndex = SORTED_KEYS.indexOf(TODAY_KEY); // get current days key
-  // If TODAY_KEY isn't found, start from the closest available future day
-  if (startIndex === -1) {
-    startIndex = SORTED_KEYS.findIndex((key) => {
-      const keyDate = new Date(`${key}T00:00:00`);
-      return keyDate >= LOCAL_NOW;
-    });
-    if (startIndex === -1) startIndex = 0; // fallback to first index if all else fails
+  return Object.keys(grouped).sort();
+}
+
+function findStartIndex(sortedKeys, startDate) {
+  let startKey = getAsFullDateString(startDate);
+  let index = sortedKeys.indexOf(startKey);
+
+  if (index === -1) {
+    index = sortedKeys.findIndex((key) => new Date(key) >= startDate);
+    if (index === -1) index = 0;
   }
 
-  return SORTED_KEYS.slice(startIndex, startIndex + 5); // get 5 days */
+  return index;
+}
 
-  return ["2025-06-28", "2025-06-29", "2025-06-30", "2025-07-01", "2025-07-02"];
+function getDateKeysToUse(numDays = 5, startDate, forecast) {
+  let sortedKeys = getSortedDateKeys(forecast);
+  let startIndex = findStartIndex(sortedKeys, startDate);
+
+  return sortedKeys.slice(startIndex, startIndex + numDays);
 }
 
 // Class that
@@ -165,8 +170,12 @@ export default function parseForecast(forecast, timezoneOffset) {
   const GROUPS = new ForecastCollection(forecast, timezoneOffset);
 
   //Iterates through each dateKey
-  for (const DATE_KEY of getDateKeysToUse(5, forecast, timezoneOffset)) {
-    const day = GROUPS.getForecast(DATE_KEY);
+  for (let dateKey of getDateKeysToUse(
+    5,
+    getLocalTime(timezoneOffset),
+    forecast
+  )) {
+    let day = GROUPS.getForecast(dateKey);
 
     let oneDay = day.getForecast(); // Create a new Forecast object for the day
 
