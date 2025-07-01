@@ -1,4 +1,4 @@
-import ForecastCollection from "./forecastCollection";
+import ForecastCollection from "./ForecastCollection";
 import { getDateKeysToUse } from "./dates";
 
 /* Algorithm:
