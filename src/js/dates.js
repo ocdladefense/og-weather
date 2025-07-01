@@ -30,7 +30,7 @@ export function groupByFullDate(entry) {
 }
 
 // Function that converts a js date object into a string.
-export function getAsFullDateString(date) {
+function getAsFullDateString(date) {
   let year = date.getFullYear();
   let month = String(date.getMonth() + 1).padStart(2, "0");
   let day = String(date.getDate()).padStart(2, "0");
@@ -50,5 +50,4 @@ export function getDateKeysToUse(numDays = 5, startDate = new Date()) {
   }
   console.log(dateKeys);
   return dateKeys.map(getAsFullDateString);
-  // return [startDate, startDate + 1, startDate + 2, startDate + 3, startDate + 4];
 }

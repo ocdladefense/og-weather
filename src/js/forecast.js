@@ -1,5 +1,5 @@
 // Class that processes weather forecast data for a single day.
-class Forecast {
+export default class Forecast {
   // i.e., the forecast for a single day, takes in a collection of samples.
   constructor(samples, timezoneOffset) {
     this.samples = samples;
@@ -63,24 +63,24 @@ class Forecast {
 
     oneDay.dt = new Date((noonEntry.dt + this.timezoneOffset) * 1000);
     oneDay.temp = noonEntry.main.temp;
-    oneDay.minTemp = findMinTemp(this.samples);
-    oneDay.maxTemp = findMaxTemp(this.samples);
-    oneDay.morningTemp = findTempAtHourApprox(
+    oneDay.minTemp = this.findMinTemp(this.samples);
+    oneDay.maxTemp = this.findMaxTemp(this.samples);
+    oneDay.morningTemp = this.findTempAtHourApprox(
       this.samples,
       6,
       this.timezoneOffset
     );
-    oneDay.dayTemp = findTempAtHourApprox(
+    oneDay.dayTemp = this.findTempAtHourApprox(
       this.samples,
       12,
       this.timezoneOffset
     );
-    oneDay.eveningTemp = findTempAtHourApprox(
+    oneDay.eveningTemp = this.findTempAtHourApprox(
       this.samples,
       18,
       this.timezoneOffset
     );
-    oneDay.nightTemp = findTempAtHourApprox(
+    oneDay.nightTemp = this.findTempAtHourApprox(
       this.samples,
       21,
       this.timezoneOffset

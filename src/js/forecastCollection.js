@@ -1,5 +1,8 @@
+import Forecast from "./forecast.js";
+import { groupByFullDate } from "./dates.js";
+
 // Class that contains all the forecast array data.
-export class ForecastCollection {
+export default class ForecastCollection {
   #forecast = {};
 
   constructor(forecast, timezoneOffset) {
