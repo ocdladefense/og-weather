@@ -68,26 +68,10 @@ export default class Forecast {
     oneDay.temp = noonEntry.main.temp;
     oneDay.minTemp = this.findMinTemp(this.samples);
     oneDay.maxTemp = this.findMaxTemp(this.samples);
-    oneDay.morningTemp = this.findTempAtHourApprox(
-      this.samples,
-      6,
-      this.timezoneOffset
-    );
-    oneDay.dayTemp = this.findTempAtHourApprox(
-      this.samples,
-      12,
-      this.timezoneOffset
-    );
-    oneDay.eveningTemp = this.findTempAtHourApprox(
-      this.samples,
-      18,
-      this.timezoneOffset
-    );
-    oneDay.nightTemp = this.findTempAtHourApprox(
-      this.samples,
-      21,
-      this.timezoneOffset
-    );
+    oneDay.morningTemp = this.findTempAtHourApprox(6);
+    oneDay.dayTemp = this.findTempAtHourApprox(12);
+    oneDay.eveningTemp = this.findTempAtHourApprox(18);
+    oneDay.nightTemp = this.findTempAtHourApprox(21);
     oneDay.description = noonEntry.weather?.[0]?.description ?? "";
     oneDay.icon = noonEntry.weather?.[0]?.icon ?? "";
     oneDay.pressure = noonEntry.main.pressure ?? null;

@@ -8,7 +8,7 @@ import DateUtils from "./DateUtils";
   Step 4: Push each forecast day into an array and return it.
 */
 
-// Default function to be used in weather.js
+// Default function to be used in app.js
 // Returns an array holding 5 oneDay objects to be displayed to the user.
 export default function parseForecast(data, timezoneOffset = 0) {
   let forecast = new Array(); //initialize array
