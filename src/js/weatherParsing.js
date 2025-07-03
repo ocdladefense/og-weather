@@ -1,5 +1,5 @@
 import ForecastCollection from "./ForecastCollection";
-import { getDateKeysToUse } from "./dates";
+import DateUtils from "./DateUtils";
 
 /* Algorithm:
   Step 1: Retreive forecast array, usually containing 40 entries, and group them together based on their fulldate.
@@ -10,21 +10,25 @@ import { getDateKeysToUse } from "./dates";
 
 // Default function to be used in weather.js
 // Returns an array holding 5 oneDay objects to be displayed to the user.
-export default function parseForecast(forecast, timezoneOffset) {
-  let simpleForecast = new Array(); //initialize array
+export default function parseForecast(data, timezoneOffset = 0) {
+  let forecast = new Array(); //initialize array
 
-  let groups = new ForecastCollection(forecast, timezoneOffset);
+  let groups = new ForecastCollection(data, timezoneOffset);
 
-  let dateKeysToUse = getDateKeysToUse();
+  let range = DateUtils.createRange();
+
+  let keys = range.map((date) => {
+    return date.toString();
+  });
 
   //Iterates through each dateKey
-  for (let dateKey of dateKeysToUse) {
-    let day = groups.getDayForecast(dateKey);
+  for (let key of keys) {
+    let day = groups.getDayForecast(key);
 
     let oneDay = day.buildDaySummary(); // Populate the oneDay object with forecast data for the single day.
 
-    simpleForecast.push(oneDay);
+    forecast.push(oneDay);
   }
 
-  return simpleForecast;
+  return forecast;
 }

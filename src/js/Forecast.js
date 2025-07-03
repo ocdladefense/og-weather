@@ -1,5 +1,8 @@
 // Class that processes weather forecast data for a single day.
+
 export default class Forecast {
+  samples;
+
   // i.e., the forecast for a single day, takes in a collection of samples.
   constructor(samples, timezoneOffset) {
     this.samples = samples;
@@ -7,12 +10,12 @@ export default class Forecast {
   }
 
   // Function that finds the closest hour match, because a match isn't always gonna be there since data is only given every 3 hours.
-  findTempAtHourApprox(forecast, hour, timezoneOffset) {
+  findTempAtHourApprox(hour) {
     let closestEntry = null;
     let closestDiff = 24; // max hours in a day. Used to track the smallest difference between forecast hour and target hour.
 
-    for (let f of forecast) {
-      let localHour = new Date((f.dt + timezoneOffset) * 1000).getHours();
+    for (let f of this.samples) {
+      let localHour = new Date((f.dt + this.timezoneOffset) * 1000).getHours();
       let diff = Math.abs(localHour - hour);
       if (diff < closestDiff) {
         // If this is the closest match so far, remember it
@@ -26,14 +29,14 @@ export default class Forecast {
   }
 
   // Function that finds the minimum temp in a samples array.
-  findMinTemp(samples) {
-    return Math.min(...samples.map((f) => f.main.temp_min));
+  findMinTemp() {
+    return Math.min(...this.samples.map((f) => f.main.temp_min));
     // Loop through every sample entry, extract its temp_min, and return the smallest one
   }
 
   // Function that finds the maximum temp in a samples array.
-  findMaxTemp(samples) {
-    return Math.max(...samples.map((f) => f.main.temp_max));
+  findMaxTemp() {
+    return Math.max(...this.samples.map((f) => f.main.temp_max));
   }
 
   // This function finds the forecast entry closest to the given time.
