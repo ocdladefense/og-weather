@@ -3,3 +3,11 @@ import "../css/styles.scss";
 import "regenerator-runtime/runtime";
 
 import bootstrap from "bootstrap";
+import App from "./app.js";
+
+let app = new App();
+
+// Initialize the Weather class on window load
+window.onload = () => {
+  app.render();
+};

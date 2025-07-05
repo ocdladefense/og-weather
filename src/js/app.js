@@ -1,5 +1,3 @@
-import "./general";
-// without this I get an error at runtime.  babel 7 and preset env.
 const regeneratorRuntime = require("regenerator-runtime");
 
 // parseForecast is the ONLY export (default) from weatherParsing.js
@@ -12,12 +10,34 @@ import AppView from "./components";
 // sample openweathermap geolocation api call
 // http://api.openweathermap.org/geo/1.0/zip?zip=97405,US&appid=e366707bc2ea3e949fb1c0a16ce76d59
 
-class Weather {
+// Two helper functions defined outside of the class.
+
+// gets lat/lng from zip
+async function zipcodeToLatLng(zipcode) {
+  const response = await fetch(`${geoUrl}zip=${zipcode},US&${apikey}`);
+  const data = await response.json();
+  return {
+    name: data.name,
+    lat: data.lat,
+    lng: data.lon,
+  };
+}
+
+// gets forecast from lat/lng
+async function latLngToForecast(lat, lng) {
+  const respnse = await fetch(`${weatherUrl}lat=${lat}&lon=${lng}&${apikey}`);
+  const data = await response.json();
+  return {
+    timezoneOffset: data.city.timezone,
+    list: data.list,
+  };
+}
+
+export default class App {
   constructor() {
     this.state = {
       timezoneOffset: 0,
       zipcode: "",
-      city: {},
       forecast: [],
       selectedDate: null,
     };
@@ -26,63 +46,43 @@ class Weather {
     this.geoUrl = "http://api.openweathermap.org/geo/1.0/zip?";
     this.apikey = "appid=f62d906d0cba21cc74c1fceb053bcb7e";
 
-    // UI elements are now managed by View
-    AppView.$form.addEventListener("submit", this.onFormSubmit.bind(this)); // Bind 'this' for the callback
+    // UI elements are now managed by AppView
   }
 
-  // This method handles rendering the detailed view for a specific day.
-  // It remains in Weather because it needs access to this.state.forecast and this.state.city.
-  renderCurrentDay(index) {
-    // This is an instance method
-    const selectedDay = this.state.forecast[index];
-    const cityName = this.state.city.name;
-    // Call the static render method on View, passing all necessary data
-    AppView.renderCurrentDayDetails(selectedDay, cityName);
-  }
+  // Gets called on the first render, and every time the user submits a new zipcode.
+  render(forecast = [], cityName = "") {
+    let onSubmit = async (e) => {
+      e.preventDefault();
+      // use e.target.zipcode.value to get the zipcode from the form.
+      let zipcode = e.target.$zipcode.value;
 
-  // Handle form submission
-  onFormSubmit(event) {
-    event.preventDefault();
-    this.state.zipcode = AppView.$zipcode.value;
+      try {
+        const city = await zipcodeToLatLng(zipcode, this.geoUrl, this.apikey);
+        const weather = await latLngToForecast(
+          city.lat,
+          city.lng,
+          this.weatherUrl,
+          this.apikey
+        );
 
-    // Fetch geolocation information
-    fetch(`${this.geoUrl}zip=${this.state.zipcode},US&${this.apikey}`)
-      .then((response) => response.json())
-      .then((data) => {
-        this.state.city.name = data.name;
-        this.state.city.lat = data.lat;
-        this.state.city.lng = data.lon;
+        forecast = parseForecast(weather.list, weather.timezoneOffset);
 
-        // Fetch weather information based on geolocation
-        fetch(
-          `${this.weatherUrl}lat=${this.state.city.lat}&lon=${this.state.city.lng}&${this.apikey}`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            this.state.timezoneOffset = data.city.timezone;
-            this.state.forecast = parseForecast(
-              data.list,
-              this.state.timezoneOffset
-            );
+        AppView.renderWeatherList(forecast);
+        AppView.clearCurrentDay();
+        // Clear the zipcode from the UI
 
-            // Render the weather list and clear the current day details
-            AppView.renderWeatherList(
-              this.state.forecast,
-              this.renderCurrentDay.bind(this)
-            );
-            AppView.clearCurrentDay();
-
-            // Clear the zipcode from the UI
-            AppView.$zipcode.value = "";
-          });
-      })
-      .catch((error) => {
+        AppView.$zipcode.value = "";
+      } catch (err) {
         alert("There was a problem getting location information!");
-      });
-  }
-}
+      }
+    };
 
-// Initialize the Weather class on window load
-window.onload = () => {
-  new Weather();
-};
+    // The forecast does render the first time, only with an empty array :-)
+    AppView.render({ forecast, onSubmit });
+  }
+
+  // IMPORTANT!! this goes away.
+  // gets replaced by two distinct functions one for each fetch.
+  // Also; no need to ever use 'this' in either function, functions take whatever data they need as parameters.
+  // place these functions outside of this class, put the pieces together above in onSubmit, line 38 (inside of render()).
+}

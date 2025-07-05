@@ -6,7 +6,7 @@ const copyPlugin = require("copy-webpack-plugin");
 module.exports = {
   mode: "development",
   entry: {
-    weather: "./src/js/app.js",
+    weather: "./src/js/index.js",
   },
   output: {
     path: path.resolve(__dirname, "dist"),

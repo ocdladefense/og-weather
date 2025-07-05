@@ -7,6 +7,13 @@ export default class AppView {
   static $weatherList = document.querySelector("#weatherList");
   static $currentDay = document.querySelector("#currentDay");
 
+  static render({ forecast, onSubmit }) {
+    let $form = document.querySelector("#zipForm");
+    $form.addEventListener("submit", onSubmit);
+
+    return AppView.renderWeatherList(forecast);
+  }
+
   // Render individual weather list item
   // No longer includes event handlers, only displays view.
   static renderWeatherListItem(forecastDay, index) {
@@ -24,13 +31,17 @@ export default class AppView {
   }
 
   // Render the entire weather list
-  // Now accepts a callback function so it wont have to reference app.js to use onclick.
-  static renderWeatherList(forecastDays, onItemClick) {
+  static renderWeatherList(forecastDays) {
     const itemsHTML = forecastDays
       .map((forecastDay, index) =>
         this.renderWeatherListItem(forecastDay, index)
       )
       .join("");
+
+    let onItemClick = (index) => {
+      const selectedDay = forecastDays[index];
+      AppView.renderCurrentDayDetails(selectedDay);
+    };
 
     this.$weatherList.innerHTML = `<div class="weather-list flex-parent">${itemsHTML}</div>`;
 
