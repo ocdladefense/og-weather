@@ -1,4 +1,4 @@
-import DateUtils from "./DateUtils";
+import DateUtils from "../DateUtils";
 
 export default class AppView {
   // Static properties for DOM elements, accessible as AppView.$element
