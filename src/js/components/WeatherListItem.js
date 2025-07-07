@@ -1,9 +1,9 @@
 import DateUtils from "../DateUtils";
 
 // look up on mdn
-// let myDiv = document.createElement("div");
+// let myDivv = document.createElement("div");
 // document.appendChild(childDiv);
-// myDiv.setAttribute("class", "weather-list-item");
+// myDivv.setAttribute("class", "weather-list-item");
 
 // Render individual weather list item
 // No longer includes event handlers, only displays view.
@@ -14,9 +14,17 @@ export default function WeatherListItem(forecastDay, index) {
 
   console.log(forecastDay.dt);
 
-  // Use data-index instead of onclick, so it can be read by an event listener in app.js.
-  return `<div class="weather-list-item"  data-index="${index}">
-   ${formattedDate} - ${DateUtils.getWeekday(new Date(forecastDay.dt))}:
-   High ${forecastDay.maxTemp}&deg;F, Low ${forecastDay.minTemp}&deg;F
- </div>`;
+  // Creates div with it's attributes
+  let itemDiv = document.createElement("div");
+  itemDiv.setAttribute("class", "weather-list-item");
+  itemDiv.setAttribute("data-index", index);
+
+  // Construct the text content
+  const weekday = DateUtils.getWeekday(new Date(forecastDay.dt));
+  const text = `${formattedDate} - ${weekday}: High ${forecastDay.maxTemp}°F, Low ${forecastDay.minTemp}°F`;
+
+  // Add text content to the div
+  itemDiv.textContent = text;
+
+ return itemDiv;
 }

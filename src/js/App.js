@@ -58,9 +58,4 @@ export default class App {
 
     app.appendChild(parent);
   }
-
-  // IMPORTANT!! this goes away.
-  // gets replaced by two distinct functions one for each fetch.
-  // Also; no need to ever use 'this' in either function, functions take whatever data they need as parameters.
-  // place these functions outside of this class, put the pieces together above in onSubmit, line 38 (inside of render()).
 }
