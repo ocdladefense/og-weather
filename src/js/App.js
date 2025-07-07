@@ -2,8 +2,9 @@ const regeneratorRuntime = require("regenerator-runtime");
 
 // parseForecast is the ONLY export (default) from weatherParsing.js
 import parseForecast from "./weatherParsing";
-// getWeekday are methods from DateUtils.js
-import AppView from "./components/components";
+
+import ClearDay from "./components/ClearDay";
+import RenderList from "./components/RenderList";
 
 import Forecast from "./services/Forecast";
 import Geolocation from "./services/Geolocation";
@@ -14,6 +15,8 @@ import Geolocation from "./services/Geolocation";
 // http://api.openweathermap.org/geo/1.0/zip?zip=97405,US&appid=e366707bc2ea3e949fb1c0a16ce76d59
 
 export default class App {
+
+  
   constructor() {
     this.state = {
       timezoneOffset: 0,
@@ -22,7 +25,6 @@ export default class App {
       selectedDate: null,
     };
 
-    // UI elements are now managed by AppView
   }
 
   // Gets called on the first render, and every time the user submits a new zipcode.
@@ -46,11 +48,11 @@ export default class App {
       let forecast = parseForecast(data, timezoneOffset);
 
       this.render(forecast);
-      AppView.clearCurrentDay();
+      ClearDay();
     };
 
     // The forecast does render the first time, only with an empty array :-)
-    let parent = AppView.render({ forecast, onSubmit });
+    let parent = RenderList({ forecast, onSubmit });
 
     let app = document.getElementById("app");
 

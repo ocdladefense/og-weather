@@ -1,7 +1,9 @@
+import DateUtils from "../DateUtils";
+
 // look up on mdn
-let myDiv = document.createElement("div");
-document.appendChild(childDiv);
-myDiv.setAttribute("class", "weather-list-item");
+// let myDiv = document.createElement("div");
+// document.appendChild(childDiv);
+// myDiv.setAttribute("class", "weather-list-item");
 
 // Render individual weather list item
 // No longer includes event handlers, only displays view.
