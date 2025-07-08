@@ -10,7 +10,7 @@ import DayDetails from "./DayDetails"
     //   .join("");
 
     let onItemClick = (e) => {
-      let selectedDay = forecastDays[e.target.dataset.index];
+      let selectedDay = forecastDays[e.currentTarget.dataset.index];
       DayDetails(selectedDay);
     };
 
