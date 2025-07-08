@@ -7,7 +7,7 @@ import DateUtils from "../DateUtils";
 
 // Render individual weather list item
 // No longer includes event handlers, only displays view.
-export default function WeatherListItem(forecastDay, index) {
+export default function WeatherListItem(forecastDay, onItemClick, index) {
   const formattedDate = `${new Date(forecastDay.dt).getMonth() + 1}/${new Date(
     forecastDay.dt
   ).getDate()}`;
@@ -25,6 +25,7 @@ export default function WeatherListItem(forecastDay, index) {
 
   // Add text content to the div
   itemDiv.textContent = text;
+  itemDiv.addEventListener("click", onItemClick);
 
  return itemDiv;
 }

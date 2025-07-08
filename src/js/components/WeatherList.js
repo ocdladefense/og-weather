@@ -9,8 +9,8 @@ import DayDetails from "./DayDetails"
     //   )
     //   .join("");
 
-    let onItemClick = (index) => {
-      let selectedDay = forecastDays[index];
+    let onItemClick = (e) => {
+      let selectedDay = forecastDays[e.target.dataset.index];
       DayDetails(selectedDay);
     };
 
@@ -18,12 +18,7 @@ import DayDetails from "./DayDetails"
     listDiv.classList.add("weather-list", "flex-parent");
 
     forecastDays.forEach((forecastDay, index) => {
-      let item = WeatherListItem(forecastDay, index);
-
-      // Add onclick listener to the item
-      item.addEventListener("click", (event) => {
-        onItemClick(index);
-      });
+        let item = WeatherListItem(forecastDay, onItemClick, index);
 
       listDiv.appendChild(item);
     });
