@@ -3,7 +3,7 @@ const regeneratorRuntime = require("regenerator-runtime");
 // parseForecast is the ONLY export (default) from weatherParsing.js
 import parseForecast from "./weatherParsing";
 
-import ClearDay from "./components/ClearDay";
+import ClearDayDetails from "./components/ClearDayDetails";
 import RenderList from "./components/RenderList";
 
 import Forecast from "./services/Forecast";
@@ -48,14 +48,16 @@ export default class App {
       let forecast = parseForecast(data, timezoneOffset);
 
       this.render(forecast);
-      ClearDay();
-    };
+      ClearDayDetails();
+  };
 
     // The forecast does render the first time, only with an empty array :-)
     let parent = RenderList({ forecast, onSubmit });
 
     let app = document.getElementById("app");
 
+    // Clear existing forecast list, without this it was increasing exponentialy
+    app.innerHTML = "";
     app.appendChild(parent);
   }
 }
