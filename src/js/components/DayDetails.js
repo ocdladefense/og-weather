@@ -10,8 +10,8 @@
 
     // Div
     let dayDiv = document.createElement("div");
-    dayDiv.setAttribute("id", "current-day-details");
-    dayDiv.classList.add("current-day-details");
+    dayDiv.setAttribute("id", "current-day");
+    dayDiv.classList.add("current-day");
 
     // Heading
     let h2 = document.createElement("h2");
@@ -47,12 +47,5 @@
     pEveningNight.textContent = `Evening Temp: ${selectedDay.eveningTemp}°F, Night Temp: ${selectedDay.nightTemp}°F`;
     dayDiv.appendChild(pEveningNight);
 
-    
-    // Select the existing current-day div and replace its content
-    let currentDayContainer = document.getElementById("current-day");
-
-    // Find the existing content to replace within currentDayContainer
-    let oldContent = document.getElementById("current-day-details");
-
-    currentDayContainer.replaceChild(dayDiv, oldContent);
+    return dayDiv;
   }
