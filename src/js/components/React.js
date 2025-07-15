@@ -4,8 +4,7 @@ const states = {};
 
 
 export function setState(key, value) {
-
-    states[key] = value;
+  states[key] = value;
 }
 
 
@@ -22,7 +21,7 @@ export function renderComponent(component, props) {
     // Get the app element from the DOM
     let app = document.getElementById("app");
 
-    // Clear existing forecast list, without this it was increasing exponentialy
+    // Clear existing forecast list
     app.innerHTML = "";
     app.appendChild(elements);
 }

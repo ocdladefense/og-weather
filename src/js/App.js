@@ -5,7 +5,7 @@ import parseForecast from "./api/weatherParsing";
 import Weather from "./components/Weather";
 import Forecast from "./services/Forecast";
 import Geolocation from "./services/Geolocation";
-import {renderComponent} from "./components/React";
+import {renderComponent, getState, setState} from "./components/React";
 
 // sample openweathermap weather api call
 //https://api.openweathermap.org/data/2.5/forecast?units=imperial&lat=43.9698&lon=-123.2006&appid=e366707bc2ea3e949fb1c0a16ce76d59
@@ -49,7 +49,12 @@ export default class App {
     };
 
     // The forecast does render the first time, only with an empty array :-)
-  
+
+    // Set the first selected day only once forecast is available
+    if (forecast.length > 0 && getState("selectedDayIndex") == null) {
+      setState("selectedDayIndex", 0);
+    }
+
 
     renderComponent(Weather, {forecast, onSubmit});
   }

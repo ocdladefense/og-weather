@@ -1,8 +1,8 @@
+import DateUtils from "../utils/DateUtils";
+
  // Render detailed weather information for the selected day
   export default function DayDetails(selectedDay, cityName = "") {
-    const formattedDate = `${
-      new Date(selectedDay.dt).getMonth() + 1
-    }/${new Date(selectedDay.dt).getDate()}`;
+    let formattedDate = DateUtils.getFormattedDate(selectedDay);
 
     console.log("Selected Day Date:", selectedDay.dt);
     console.log("Selected Day Date Type:", typeof selectedDay.dt);

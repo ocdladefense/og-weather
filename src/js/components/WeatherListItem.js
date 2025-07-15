@@ -1,16 +1,9 @@
 import DateUtils from "../utils/DateUtils";
 
-// look up on mdn
-// let myDivv = document.createElement("div");
-// document.appendChild(childDiv);
-// myDivv.setAttribute("class", "weather-list-item");
-
 // Render individual weather list item
 // No longer includes event handlers, only displays view.
 export default function WeatherListItem(forecastDay, onItemClick, index) {
-  const formattedDate = `${new Date(forecastDay.dt).getMonth() + 1}/${new Date(
-    forecastDay.dt
-  ).getDate()}`;
+  let formattedDate = DateUtils.getFormattedDate(forecastDay);
 
   console.log(forecastDay.dt);
 

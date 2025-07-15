@@ -52,4 +52,11 @@ export default class DateUtils {
 
     return range.map((date) => new DateUtils(date));
   }
+
+  
+  static getFormattedDate(selectedDay) {
+    return `${
+      new Date(selectedDay.dt).getMonth() + 1
+    }/${new Date(selectedDay.dt).getDate()}`;
+  }
 }

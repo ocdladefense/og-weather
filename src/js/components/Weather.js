@@ -15,6 +15,9 @@ import {getState, renderComponent} from "./React";
     let form = ZipCodeForm({onSubmit});
 
     let container = document.createElement("div");
+    
+    container.appendChild(form);
+
     let theList = WeatherList({forecast, rerender: () => {
       renderComponent(Weather, {forecast, onSubmit});
     }});
