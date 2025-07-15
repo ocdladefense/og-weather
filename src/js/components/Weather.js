@@ -1,8 +1,7 @@
-import {renderComponent} from "./React";
 import DayDetails from "./DayDetails";
 import WeatherList from "./WeatherList";  
 import ZipCodeForm from "./ZipCodeForm";
-import {getState} from "./React";
+import {getState, renderComponent} from "./React";
 
 
 

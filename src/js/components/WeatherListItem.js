@@ -1,4 +1,4 @@
-import DateUtils from "../DateUtils";
+import DateUtils from "../utils/DateUtils";
 
 // look up on mdn
 // let myDivv = document.createElement("div");

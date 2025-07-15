@@ -1,5 +1,5 @@
-import ForecastCollection from "./ForecastCollection";
-import DateUtils from "./DateUtils";
+import ForecastCollection from "../models/ForecastCollection";
+import DateUtils from "../utils/DateUtils";
 
 /* Algorithm:
   Step 1: Retreive forecast array, usually containing 40 entries, and group them together based on their fulldate.

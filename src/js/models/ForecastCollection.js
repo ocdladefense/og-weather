@@ -1,5 +1,5 @@
 import Forecast from "./Forecast.js";
-import DateUtils from "./DateUtils.js";
+import DateUtils from "../utils/DateUtils.js";
 
 // Class that contains all the forecast array data.
 export default class ForecastCollection {

@@ -1,7 +1,7 @@
 const regeneratorRuntime = require("regenerator-runtime");
 
 // parseForecast is the ONLY export (default) from weatherParsing.js
-import parseForecast from "./weatherParsing";
+import parseForecast from "./api/weatherParsing";
 import Weather from "./components/Weather";
 import Forecast from "./services/Forecast";
 import Geolocation from "./services/Geolocation";
