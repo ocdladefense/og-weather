@@ -1,24 +1,40 @@
-import DateUtils from "../utils/DateUtils";
 
+import WeatherIcon from "./WeatherIcon";
 // Render individual weather list item
 // No longer includes event handlers, only displays view.
-export default function WeatherListItem(forecastDay, onItemClick, index) {
-  let formattedDate = DateUtils.getFormattedDate(forecastDay);
+export default function WeatherListItem(day, onItemClick, index) {
+  let formattedDate = day.getFormattedDate();
 
-  console.log(forecastDay.dt);
 
-  // Creates div with it's attributes
-  let itemDiv = document.createElement("div");
-  itemDiv.setAttribute("class", "weather-list-item");
-  itemDiv.setAttribute("data-index", index);
+  // Creates div with its attributes.
+  let div = document.createElement("div");
+  div.setAttribute("class", "weather-list-item");
+  div.setAttribute("data-index", index);
 
-  // Construct the text content
-  const weekday = DateUtils.getWeekday(new Date(forecastDay.dt));
-  const text = `${formattedDate} - ${weekday}: High ${forecastDay.maxTemp}°F, Low ${forecastDay.minTemp}°F`;
+  // Construct the text content.
+  // How do we convert "2025-07-15" to "Tuesday"?
+  const label = document.createElement("span");
+  label.setAttribute("class","label");
+  label.textContent = "Monday"; //DateUtils.getWeekday(day.getLabel());
 
-  // Add text content to the div
-  itemDiv.textContent = text;
-  itemDiv.addEventListener("click", onItemClick);
+  let icon = WeatherIcon(day);
 
- return itemDiv;
+  let high = document.createElement("span");
+  high.setAttribute("class", "high");
+  high.textContent = day.getHigh() + " " + day.getUnits();
+
+  let low = document.createElement("span");
+  low.setAttribute("class", "low");
+  low.textContent = day.getLow() + " " + day.getUnits();
+
+  
+  div.appendChild(label);
+  div.appendChild(icon);
+  div.appendChild(high);
+  div.appendChild(document.createTextNode(" / "));
+  div.appendChild(low);
+
+  div.addEventListener("click", onItemClick);
+
+ return div;
 }

@@ -16,6 +16,9 @@ export default class ForecastCollection {
 
   // Function that returns a Forecast object, containing all the samples for that day.
   getDayForecast(dateString) {
-    return new Forecast(this.#forecast[dateString] || [], this.timezoneOffset);
+    let f = new Forecast(this.#forecast[dateString] || [], this.timezoneOffset);
+    f.setLabel(dateString);
+
+    return f;
   }
 }

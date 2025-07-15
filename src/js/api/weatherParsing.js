@@ -25,9 +25,7 @@ export default function parseForecast(data, timezoneOffset = 0) {
   for (let key of keys) {
     let day = groups.getDayForecast(key);
 
-    let oneDay = day.buildDaySummary(); // Populate the oneDay object with forecast data for the single day.
-
-    forecast.push(oneDay);
+    forecast.push(day);
   }
 
   return forecast;

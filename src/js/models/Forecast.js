@@ -1,16 +1,33 @@
+import DateUtils from "../utils/DateUtils";
+
 // Class that processes weather forecast data for a single day.
 
 export default class Forecast {
+
   samples;
 
+  // Human readable label for the forecast, e.g., "Monday, January 1st"
+  label;
+
+
+  
   // i.e., the forecast for a single day, takes in a collection of samples.
   constructor(samples, timezoneOffset) {
     this.samples = samples;
     this.timezoneOffset = timezoneOffset;
   }
 
+  setLabel(label) {
+    this.label = label;
+  }
+
+  getLabel() {
+    return this.label;
+  }
+
   // Function that finds the closest hour match, because a match isn't always gonna be there since data is only given every 3 hours.
-  findTempAtHourApprox(hour) {
+  findTempAtHourApprox(hour, units = "imperial") {
+    let unitsLabel = units === "metric" ? "°C" : "°F";
     let closestEntry = null;
     let closestDiff = 24; // max hours in a day. Used to track the smallest difference between forecast hour and target hour.
 
@@ -24,9 +41,16 @@ export default class Forecast {
       }
     }
 
-    return closestEntry ? closestEntry.main.temp : null;
+    return closestEntry ? (closestEntry.main.temp + " " + unitsLabel) : null;
     // returns the entry closest to the desired time.
   }
+
+
+  getFormattedDate() {
+    return DateUtils.getFormattedDate(this.label);
+  }
+
+
 
   // Function that finds the minimum temp in a samples array.
   findMinTemp() {
@@ -34,10 +58,12 @@ export default class Forecast {
     // Loop through every sample entry, extract its temp_min, and return the smallest one
   }
 
+
   // Function that finds the maximum temp in a samples array.
   findMaxTemp() {
     return Math.max(...this.samples.map((f) => f.main.temp_max));
   }
+
 
   // This function finds the forecast entry closest to the given time.
   findClosestEntryToHour(hourToLookFor) {
@@ -58,26 +84,65 @@ export default class Forecast {
     return closestEntry || this.samples[4] || this.samples[0] || null;
   }
 
-  // This function will create and return an object holding one days worth of forecast data.
-  buildDaySummary() {
-    let oneDay = {}; // Create a new object to hold the day's forecast
 
+  getIcon() {
     let noonEntry = this.findClosestEntryToHour(12);
 
-    oneDay.dt = new Date((noonEntry.dt + this.timezoneOffset) * 1000);
-    oneDay.temp = noonEntry.main.temp;
-    oneDay.minTemp = this.findMinTemp(this.samples);
-    oneDay.maxTemp = this.findMaxTemp(this.samples);
-    oneDay.morningTemp = this.findTempAtHourApprox(6);
-    oneDay.dayTemp = this.findTempAtHourApprox(12);
-    oneDay.eveningTemp = this.findTempAtHourApprox(18);
-    oneDay.nightTemp = this.findTempAtHourApprox(21);
-    oneDay.description = noonEntry.weather?.[0]?.description ?? "";
-    oneDay.icon = noonEntry.weather?.[0]?.icon ?? "";
-    oneDay.pressure = noonEntry.main.pressure ?? null;
-    oneDay.wind = noonEntry.wind.speed ?? null;
-    oneDay.humidity = noonEntry.main.humidity ?? null;
-
-    return oneDay;
+    return noonEntry.weather?.[0]?.icon ?? "";
   }
+
+
+  getHigh() {
+    return Math.round(this.findMaxTemp());
+  }
+
+
+  getLow() {
+    return Math.round(this.findMinTemp());
+  }
+
+  getUnits() {
+    return "°F";
+  }
+
+  getHumidity() {
+    let noonEntry = this.findClosestEntryToHour(12);
+    return noonEntry.main.humidity ?? null;
+  }
+
+
+  getWind() {
+    let noonEntry = this.findClosestEntryToHour(12);
+    return noonEntry.wind.speed ?? null;  
+  }
+
+
+  getPressure() {
+    let noonEntry = this.findClosestEntryToHour(12);
+    return noonEntry.main.pressure ?? null;
+  }
+
+
+  getDescription() {
+    let noonEntry = this.findClosestEntryToHour(12);
+    return noonEntry.weather?.[0]?.description ?? "";
+  }
+
+
+  getTemp(partOfDayString) {
+    switch (partOfDayString) {
+      case "morning":
+        return this.findTempAtHourApprox(6);
+      case "day":
+        return this.findTempAtHourApprox(12);
+      case "evening":
+        return this.findTempAtHourApprox(18);
+      case "night":
+        return this.findTempAtHourApprox(21);
+      default:
+        return null;
+    }
+  }
+
+
 }

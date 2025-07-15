@@ -6,13 +6,13 @@ import {getState, renderComponent} from "./React";
 
 
 
-  export default function Weather({ forecast, onSubmit }) {
+  export default function Weather({ forecast, onSubmit, zipcode, cityName }) {
 
 
     let selectedDayIndex = getState("selectedDayIndex") || null;
     // we should be able to acecess a new value for selectedDayIndex, if the value has changed.
 
-    let form = ZipCodeForm({onSubmit});
+    let form = ZipCodeForm({onSubmit, zipcode});
 
     let container = document.createElement("div");
     

@@ -1,12 +1,11 @@
 import DateUtils from "../utils/DateUtils";
+import WeatherIcon from "./WeatherIcon";
+
 
  // Render detailed weather information for the selected day
-  export default function DayDetails(selectedDay, cityName = "") {
-    let formattedDate = DateUtils.getFormattedDate(selectedDay);
+  export default function DayDetails(day, cityName = "") {
+    let formattedDate = DateUtils.getFormattedDate(day.getLabel());
 
-    console.log("Selected Day Date:", selectedDay.dt);
-    console.log("Selected Day Date Type:", typeof selectedDay.dt);
-    console.log(selectedDay);
 
     // Div
     let dayDiv = document.createElement("div");
@@ -20,32 +19,41 @@ import DateUtils from "../utils/DateUtils";
 
     // Description with img Icon paragraph
     let pDesc = document.createElement("p");
-    pDesc.textContent = selectedDay.description + " ";
-    let icon = document.createElement("img");
-    icon.src = `http://openweathermap.org/img/w/${selectedDay.icon}.png`;
-    icon.alt = selectedDay.description;
+    pDesc.textContent = day.getDescription() + " ";
+let icon = WeatherIcon(day);
     pDesc.appendChild(icon);
     dayDiv.appendChild(pDesc);
 
     // High/Low temp paragraph
     let pTemp = document.createElement("p");
-    pTemp.textContent = `High: ${selectedDay.maxTemp}°F, Low: ${selectedDay.minTemp}°F`;
+    pTemp.textContent = `High: ${day.getHigh()}, Low: ${day.getLow()}`;
     dayDiv.appendChild(pTemp);
 
     // Humidity, wind, and pressue paragraph
     let pExtras = document.createElement("p");
-    pExtras.textContent = `Humidity: ${selectedDay.humidity}%, Wind: ${selectedDay.wind} mph, Atmospheric Pressure: ${selectedDay.pressure} hPa`;
+    pExtras.textContent = `Humidity: ${day.getHumidity()}%, Wind: ${day.getWind()} mph, Atmospheric Pressure: ${day.getPressure()} hPa`;
     dayDiv.appendChild(pExtras);
 
     // Morning and day temp paragraph
-    let pMorningDay = document.createElement("p");
-    pMorningDay.textContent = `Morning Temp: ${selectedDay.morningTemp}°F, Day Temp: ${selectedDay.dayTemp}°F`;
-    dayDiv.appendChild(pMorningDay);
+    let parts = ["morning","day","evening","night"].map(function(part) { 
+      let p = document.createElement("p");
+      p.setAttribute("id", `temp-${part}`);
 
-    // Evening and night temp paragraph
-    let pEveningNight = document.createElement("p");
-    pEveningNight.textContent = `Evening Temp: ${selectedDay.eveningTemp}°F, Night Temp: ${selectedDay.nightTemp}°F`;
-    dayDiv.appendChild(pEveningNight);
+      let label = `${part.charAt(0).toUpperCase() + part.slice(1)} Temp: `;
+      let value = day.getTemp(part);
+
+      p.textContent = `${label}${value}`;
+
+      return p;
+    });
+
+
+    dayDiv.append(...parts);
+
+
+
+
+
 
     return dayDiv;
   }

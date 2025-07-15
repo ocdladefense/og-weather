@@ -26,7 +26,7 @@ export default class App {
   }
 
   // Gets called on the first render, and every time the user submits a new zipcode.
-  render(forecast = [], cityName = "") {
+  render(forecast = [], zipcode = "", cityName = "") {
     let onSubmit = async (e) => {
       e.preventDefault();
       // use e.target.zipcode.value to get the zipcode from the form.
@@ -34,18 +34,13 @@ export default class App {
 
       let forecastService = new Forecast();
       let geolocationService = new Geolocation();
-
-      let { city, lat, lng } = await geolocationService.zipcodeToLatLng(
-        zipcode
-      );
-      let { data, timezoneOffset } = await forecastService.getForecast(
-        lat,
-        lng
-      );
+      let units = "imperial"; // or "metric", depending on your preference
+      let { city, lat, lng } = await geolocationService.load(zipcode);
+      let { data, timezoneOffset } = await forecastService.load(lat,lng,units);
 
       let forecast = parseForecast(data, timezoneOffset);
 
-      this.render(forecast);
+      this.render(forecast, zipcode, city);
     };
 
     // The forecast does render the first time, only with an empty array :-)
@@ -56,7 +51,7 @@ export default class App {
     }
 
 
-    renderComponent(Weather, {forecast, onSubmit});
+    renderComponent(Weather, {forecast, zipcode, cityName, onSubmit});
   }
 
 }
