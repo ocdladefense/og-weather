@@ -1,4 +1,5 @@
 import DateUtils from "../utils/DateUtils";
+import Sample from "./Sample";
 
 // Class that processes weather forecast data for a single day.
 
@@ -26,25 +27,29 @@ export default class Forecast {
   }
 
   // Function that finds the closest hour match, because a match isn't always gonna be there since data is only given every 3 hours.
-  findTempAtHourApprox(hour, units = "imperial") {
-    let unitsLabel = units === "metric" ? "°C" : "°F";
-    let closestEntry = null;
-    let closestDiff = 24; // max hours in a day. Used to track the smallest difference between forecast hour and target hour.
+  findSampleAtHourApprox(hour, units = "imperial") {
+    // let unitsLabel = units === "metric" ? "°C" : "°F";
 
-    for (let f of this.samples) {
-      let localHour = new Date((f.dt + this.timezoneOffset) * 1000).getHours();
-      let diff = Math.abs(localHour - hour);
-      if (diff < closestDiff) {
-        // If this is the closest match so far, remember it
-        closestDiff = diff;
-        closestEntry = f;
-      }
-    }
+    let diffs = this.samples.map((sample) => {
+      let localHour = new Date((sample.dt + this.timezoneOffset) * 1000).getHours();
+      return [Math.abs(localHour - hour), sample];
+    });
+   
+    diffs.sort((a,b) => a[0] - b[0]);
 
-    return closestEntry ? (closestEntry.main.temp + " " + unitsLabel) : null;
-    // returns the entry closest to the desired time.
+    let [diff, sample] = diffs[0];
+
+    return sample;
+
   }
 
+  findTempAtHourApprox(hour, units = "imperial"){
+    let sample = this.findSampleAtHourApprox(hour, units);
+
+    let s = new Sample(sample);
+
+    return s.getTemperature();
+  }
 
   getFormattedDate() {
     return DateUtils.getFormattedDate(this.label);
@@ -54,39 +59,19 @@ export default class Forecast {
 
   // Function that finds the minimum temp in a samples array.
   findMinTemp() {
-    return Math.min(...this.samples.map((f) => f.main.temp_min));
+    return Math.min(...this.samples.map((f) => f.main.temp));
     // Loop through every sample entry, extract its temp_min, and return the smallest one
   }
 
 
   // Function that finds the maximum temp in a samples array.
   findMaxTemp() {
-    return Math.max(...this.samples.map((f) => f.main.temp_max));
-  }
-
-
-  // This function finds the forecast entry closest to the given time.
-  findClosestEntryToHour(hourToLookFor) {
-    // Step 1: Find the closest entry to the specified hour
-    let closestEntry = null;
-    let closestDiff = 24; // max possible diff in hours
-
-    for (let f of this.samples) {
-      let localHour = new Date((f.dt + this.timezoneOffset) * 1000).getHours();
-      let diff = Math.abs(localHour - hourToLookFor);
-      if (closestEntry === null || diff < closestDiff) {
-        closestDiff = diff;
-        closestEntry = f;
-      }
-    }
-
-    // Step 2: Fallbacks in case of empty data
-    return closestEntry || this.samples[4] || this.samples[0] || null;
+    return Math.max(...this.samples.map((f) => f.main.temp));
   }
 
 
   getIcon() {
-    let noonEntry = this.findClosestEntryToHour(12);
+    let noonEntry = this.findSampleAtHourApprox(12);
 
     return noonEntry.weather?.[0]?.icon ?? "";
   }
@@ -106,25 +91,25 @@ export default class Forecast {
   }
 
   getHumidity() {
-    let noonEntry = this.findClosestEntryToHour(12);
+    let noonEntry = this.findSampleAtHourApprox(12);
     return noonEntry.main.humidity ?? null;
   }
 
 
   getWind() {
-    let noonEntry = this.findClosestEntryToHour(12);
+    let noonEntry = this.findSampleAtHourApprox(12);
     return noonEntry.wind.speed ?? null;  
   }
 
 
   getPressure() {
-    let noonEntry = this.findClosestEntryToHour(12);
+    let noonEntry = this.findSampleAtHourApprox(12);
     return noonEntry.main.pressure ?? null;
   }
 
 
   getDescription() {
-    let noonEntry = this.findClosestEntryToHour(12);
+    let noonEntry = this.findSampleAtHourApprox(12);
     return noonEntry.weather?.[0]?.description ?? "";
   }
 
