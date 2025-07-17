@@ -9,15 +9,15 @@ export default class ForecastCollection {
 
   constructor(data, timezoneOffset) {
 
-    let samples = data.map((day) => {
+    this.#samples = data.map((day) => {
       let sample = Sample.fromOpen(day);
       sample.date = DateUtils.fromUnixTimestamp(day.dt, timezoneOffset);
       return sample;
     });
 
-    this.#samples = samples;
 
-    this.#forecast = Object.groupBy(samples, (sample) => {
+
+    this.#forecast = Object.groupBy(this.#samples, (sample) => {
       return sample.date.toString();
     })
 

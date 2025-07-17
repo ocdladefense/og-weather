@@ -21,6 +21,7 @@ export default class Sample {
     getDateTime(){
         return this.dt;
     }
+    
     getTemperature(){
         return this.temp;
     }

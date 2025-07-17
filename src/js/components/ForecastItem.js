@@ -1,5 +1,5 @@
 
-import WeatherIcon from "./WeatherIcon";
+import WeatherConditionIcon from "./WeatherConditionIcon";
 import DateUtils from "../utils/DateUtils";
 
 // Render individual weather list item
@@ -17,7 +17,7 @@ export default function WeatherListItem(day, onItemClick, index) {
   label.setAttribute("class","label");
   label.textContent = DateUtils.getWeekday(day.getLabel());
 
-  let icon = WeatherIcon(day);
+  let icon = WeatherConditionIcon({day: day, size: "small"});
 
   let high = document.createElement("span");
   high.setAttribute("class", "high");

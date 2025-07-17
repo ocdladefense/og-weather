@@ -1,8 +1,8 @@
 import DateUtils from "../utils/DateUtils";
-import WeatherIcon from "./WeatherIcon";
+import WeatherConditionIcon from "./WeatherConditionIcon";
 
  // Render detailed weather information for the selected day
-  export default function DayDetails(day, cityName = "") {
+  export default function WeatherDetails(day, cityName = "") {
     let formattedDate = DateUtils.getFormattedDate(day);
 
     // Div
@@ -18,7 +18,7 @@ import WeatherIcon from "./WeatherIcon";
     // Description with img Icon paragraph
     let pDesc = document.createElement("p");
     pDesc.textContent = day.getDescription() + " ";
-    let icon = WeatherIcon(day);
+    let icon = WeatherConditionIcon({day: day, size: "large"});
     pDesc.appendChild(icon);
     dayDiv.appendChild(pDesc);
 
