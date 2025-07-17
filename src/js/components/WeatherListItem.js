@@ -1,7 +1,9 @@
 
 import WeatherIcon from "./WeatherIcon";
+import DateUtils from "../utils/DateUtils";
+
+
 // Render individual weather list item
-// No longer includes event handlers, only displays view.
 export default function WeatherListItem(day, onItemClick, index) {
   let formattedDate = day.getFormattedDate();
 
@@ -13,9 +15,9 @@ export default function WeatherListItem(day, onItemClick, index) {
 
   // Construct the text content.
   // How do we convert "2025-07-15" to "Tuesday"?
-  const label = document.createElement("span");
+  let label = document.createElement("span");
   label.setAttribute("class","label");
-  label.textContent = "Monday"; //DateUtils.getWeekday(day.getLabel());
+  label.textContent = DateUtils.getWeekday(day.getLabel());
 
   let icon = WeatherIcon(day);
 

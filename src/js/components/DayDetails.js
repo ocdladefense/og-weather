@@ -20,7 +20,7 @@ import WeatherIcon from "./WeatherIcon";
     // Description with img Icon paragraph
     let pDesc = document.createElement("p");
     pDesc.textContent = day.getDescription() + " ";
-let icon = WeatherIcon(day);
+    let icon = WeatherIcon(day);
     pDesc.appendChild(icon);
     dayDiv.appendChild(pDesc);
 
@@ -49,9 +49,6 @@ let icon = WeatherIcon(day);
 
 
     dayDiv.append(...parts);
-
-
-
 
 
 

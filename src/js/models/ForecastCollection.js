@@ -1,12 +1,16 @@
 import Forecast from "./Forecast.js";
 import DateUtils from "../utils/DateUtils.js";
+import Sample from "./Sample.js";
 
 // Class that contains all the forecast array data.
 export default class ForecastCollection {
   #forecast = {};
+  #samples;
 
-  constructor(forecast, timezoneOffset) {
-    this.#forecast = Object.groupBy(forecast, (entry) => {
+  constructor(data, timezoneOffset) {
+    this.#samples = data.map((a) => Sample.fromOpen(a));
+
+    this.#forecast = Object.groupBy(data, (entry) => {
       let date = DateUtils.fromUnixTimestamp(entry.dt, timezoneOffset);
       return date.toString();
     });

@@ -15,6 +15,9 @@ export default class DateUtils {
 
   // returns a string that represents the day of the week based on a JS date object
   static getWeekday(date) {
+
+    let d = date instanceof Date ? date : new Date(date);
+
     const dayNames = [
       "Sunday",
       "Monday",
@@ -24,9 +27,8 @@ export default class DateUtils {
       "Friday",
       "Saturday",
     ];
-    const weekday = date.getDay();
 
-    return dayNames[weekday];
+    return dayNames[d.getDay()];
   }
 
   // Function that converts a js date object into a string.
