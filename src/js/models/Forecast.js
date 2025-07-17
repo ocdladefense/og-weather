@@ -10,11 +10,9 @@ export default class Forecast {
   // Human readable label for the forecast, e.g., "Monday, January 1st"
   label;
 
-
-  
   // i.e., the forecast for a single day, takes in a collection of samples.
   constructor(samples, timezoneOffset) {
-    this.samples = samples;
+    this.samples = samples.map(s => s instanceof Sample ? s : Sample.fromOpen(s));
     this.timezoneOffset = timezoneOffset;
   }
 
@@ -31,7 +29,7 @@ export default class Forecast {
     // let unitsLabel = units === "metric" ? "°C" : "°F";
 
     let diffs = this.samples.map((sample) => {
-      let localHour = new Date((sample.dt + this.timezoneOffset) * 1000).getHours();
+      let localHour = new Date((sample.getDateTime()+ this.timezoneOffset) * 1000).getHours();
       return [Math.abs(localHour - hour), sample];
     });
    
@@ -46,9 +44,7 @@ export default class Forecast {
   findTempAtHourApprox(hour, units = "imperial"){
     let sample = this.findSampleAtHourApprox(hour, units);
 
-    let s = new Sample(sample);
-
-    return s.getTemperature();
+    return Math.round(sample.getTemperature()) + " " + this.getUnits();
   }
 
   getFormattedDate() {
@@ -59,31 +55,31 @@ export default class Forecast {
 
   // Function that finds the minimum temp in a samples array.
   findMinTemp() {
-    return Math.min(...this.samples.map((f) => f.main.temp));
+    return Math.min(...this.samples.map((s) => s.getTemperature()));
     // Loop through every sample entry, extract its temp_min, and return the smallest one
   }
 
 
   // Function that finds the maximum temp in a samples array.
   findMaxTemp() {
-    return Math.max(...this.samples.map((f) => f.main.temp));
+    return Math.max(...this.samples.map((s) => s.getTemperature()));
   }
 
 
   getIcon() {
     let noonEntry = this.findSampleAtHourApprox(12);
 
-    return noonEntry.weather?.[0]?.icon ?? "";
+    return noonEntry.getIcon();
   }
 
 
   getHigh() {
-    return Math.round(this.findMaxTemp());
+    return Math.round(this.findMaxTemp()) + " " + this.getUnits();
   }
 
 
   getLow() {
-    return Math.round(this.findMinTemp());
+    return Math.round(this.findMinTemp()) + " " + this.getUnits();
   }
 
   getUnits() {
@@ -92,25 +88,25 @@ export default class Forecast {
 
   getHumidity() {
     let noonEntry = this.findSampleAtHourApprox(12);
-    return noonEntry.main.humidity ?? null;
+    return noonEntry.getHumidity();
   }
 
 
   getWind() {
     let noonEntry = this.findSampleAtHourApprox(12);
-    return noonEntry.wind.speed ?? null;  
+    return noonEntry.getWind();  
   }
 
 
   getPressure() {
     let noonEntry = this.findSampleAtHourApprox(12);
-    return noonEntry.main.pressure ?? null;
+    return noonEntry.getPressure();
   }
 
 
   getDescription() {
     let noonEntry = this.findSampleAtHourApprox(12);
-    return noonEntry.weather?.[0]?.description ?? "";
+    return noonEntry.getDescription();
   }
 
 

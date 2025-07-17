@@ -2,10 +2,8 @@
 import WeatherIcon from "./WeatherIcon";
 import DateUtils from "../utils/DateUtils";
 
-
 // Render individual weather list item
 export default function WeatherListItem(day, onItemClick, index) {
-  let formattedDate = day.getFormattedDate();
 
 
   // Creates div with its attributes.
@@ -23,11 +21,11 @@ export default function WeatherListItem(day, onItemClick, index) {
 
   let high = document.createElement("span");
   high.setAttribute("class", "high");
-  high.textContent = day.getHigh() + " " + day.getUnits();
+  high.textContent = day.getHigh();
 
   let low = document.createElement("span");
   low.setAttribute("class", "low");
-  low.textContent = day.getLow() + " " + day.getUnits();
+  low.textContent = day.getLow();
 
   
   div.appendChild(label);

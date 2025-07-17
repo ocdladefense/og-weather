@@ -9,23 +9,23 @@ import {getState, renderComponent} from "./React";
   export default function Weather({ forecast, onSubmit, zipcode, cityName }) {
 
 
-    let selectedDayIndex = getState("selectedDayIndex") || null;
+    let selectedDayIndex = getState("selectedDayIndex");
     // we should be able to acecess a new value for selectedDayIndex, if the value has changed.
 
-    let form = ZipCodeForm({onSubmit, zipcode});
-
     let container = document.createElement("div");
-    
+
+    let form = ZipCodeForm({onSubmit, zipcode});
     container.appendChild(form);
 
     let theList = WeatherList({forecast, rerender: () => {
-      renderComponent(Weather, {forecast, onSubmit});
+      renderComponent(Weather, {forecast, onSubmit, zipcode, cityName});
     }});
     container.appendChild(theList);
 
 
     if (selectedDayIndex != null) {
-      let details = DayDetails(forecast[selectedDayIndex]);
+      console.log("forecast sample:", forecast[0]);
+      let details = DayDetails(forecast[selectedDayIndex], cityName);
       container.appendChild(details);
     }
 

@@ -58,7 +58,7 @@ export default class DateUtils {
   
   static getFormattedDate(selectedDay) {
     return `${
-      new Date(selectedDay.dt).getMonth() + 1
-    }/${new Date(selectedDay.dt).getDate()}`;
+      new Date(selectedDay.label).getMonth() + 1
+    }/${new Date(selectedDay.label).getDate()}`;
   }
 }

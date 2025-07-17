@@ -1,11 +1,9 @@
 import DateUtils from "../utils/DateUtils";
 import WeatherIcon from "./WeatherIcon";
 
-
  // Render detailed weather information for the selected day
   export default function DayDetails(day, cityName = "") {
-    let formattedDate = DateUtils.getFormattedDate(day.getLabel());
-
+    let formattedDate = DateUtils.getFormattedDate(day);
 
     // Div
     let dayDiv = document.createElement("div");

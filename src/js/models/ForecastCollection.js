@@ -8,21 +8,29 @@ export default class ForecastCollection {
   #samples;
 
   constructor(data, timezoneOffset) {
-    this.#samples = data.map((a) => Sample.fromOpen(a));
 
-    this.#forecast = Object.groupBy(data, (entry) => {
-      let date = DateUtils.fromUnixTimestamp(entry.dt, timezoneOffset);
-      return date.toString();
+    let samples = data.map((day) => {
+      let sample = Sample.fromOpen(day);
+      sample.date = DateUtils.fromUnixTimestamp(day.dt, timezoneOffset);
+      return sample;
     });
+
+    this.#samples = samples;
+
+    this.#forecast = Object.groupBy(samples, (sample) => {
+      return sample.date.toString();
+    })
 
     this.timezoneOffset = timezoneOffset;
   }
 
   // Function that returns a Forecast object, containing all the samples for that day.
   getDayForecast(dateString) {
-    let f = new Forecast(this.#forecast[dateString] || [], this.timezoneOffset);
-    f.setLabel(dateString);
+    let daySamples = this.#forecast[dateString] || [];
 
-    return f;
+    let forecast = new Forecast(daySamples, this.timezoneOffset);
+    forecast.setLabel(dateString);
+
+    return forecast;
   }
 }
