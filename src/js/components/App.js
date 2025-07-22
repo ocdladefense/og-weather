@@ -1,12 +1,12 @@
-import DayDetails from "./DayDetails";
-import WeatherList from "./WeatherList";  
+import WeatherDetails from "./WeatherDetails";
+import Forecast from "./Forecast";  
 import ZipCodeForm from "./ZipCodeForm";
 import {getState, renderComponent} from "./React";
 
 
 
 
-  export default function Weather({ forecast, onSubmit, zipcode, cityName }) {
+  export default function App({ currentWeather, forecast, onSubmit, zipcode, cityName }) {
 
 
     let selectedDayIndex = getState("selectedDayIndex");
@@ -17,15 +17,18 @@ import {getState, renderComponent} from "./React";
     let form = ZipCodeForm({onSubmit, zipcode});
     container.appendChild(form);
 
-    let theList = WeatherList({forecast, rerender: () => {
-      renderComponent(Weather, {forecast, onSubmit, zipcode, cityName});
+    // Render the current weather
+
+
+    let theList = Forecast({forecast, rerender: () => {
+      renderComponent(App, {forecast, onSubmit, zipcode, cityName});
     }});
     container.appendChild(theList);
 
 
     if (selectedDayIndex != null) {
       console.log("forecast sample:", forecast[0]);
-      let details = DayDetails(forecast[selectedDayIndex], cityName);
+      let details = WeatherDetails(forecast[selectedDayIndex], cityName);
       container.appendChild(details);
     }
 

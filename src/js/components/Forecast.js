@@ -1,8 +1,8 @@
-import WeatherListItem from "./WeatherListItem"
+import ForecastItem from "./ForecastItem"
 import {setState} from "./React";
 
  // Render the entire weather list
- export default function WeatherList({forecast, rerender}) {
+ export default function Forecast({forecast, rerender}) {
 
     let onItemClick = (e) => {
       let selectedDayIndex = e.currentTarget.dataset.index;
@@ -14,7 +14,7 @@ import {setState} from "./React";
     listDiv.classList.add("weather-list", "flex-parent");
 
     forecast.forEach((day, index) => {
-        let item = WeatherListItem(day, onItemClick, index);
+        let item = ForecastItem(day, onItemClick, index);
 
       listDiv.appendChild(item);
     });

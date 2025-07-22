@@ -2,7 +2,8 @@ const regeneratorRuntime = require("regenerator-runtime");
 
 // parseForecast is the ONLY export (default) from weatherParsing.js
 import parseForecast from "./api/weatherParsing";
-import Weather from "./components/Weather";
+import App from "./components/App";
+import CurrentWeather from "./services/CurrentWeather";
 import Forecast from "./services/Forecast";
 import Geolocation from "./services/Geolocation";
 import {renderComponent, getState, setState} from "./components/React";
@@ -12,7 +13,7 @@ import {renderComponent, getState, setState} from "./components/React";
 // sample openweathermap geolocation api call
 // http://api.openweathermap.org/geo/1.0/zip?zip=97405,US&appid=e366707bc2ea3e949fb1c0a16ce76d59
 
-export default class App {
+export default class Controller {
 
   
   constructor() {
@@ -34,17 +35,24 @@ export default class App {
 
       let forecastService = new Forecast();
       let geolocationService = new Geolocation();
+      let currentWeatherService = new CurrentWeather();
       let units = "imperial"; // or "metric", depending on your preference
       let { city, lat, lng } = await geolocationService.load(zipcode);
       let { data, timezoneOffset } = await forecastService.load(lat,lng,units);
+      // Get the current weather using the appropriate endpoint from the OpenWeatherMap API.
+      // let {foo,bar} = await currentWeatherService.load(lat, lng, units);
 
       let forecast = parseForecast(data, timezoneOffset);
 
       this.render(forecast, zipcode, city);
     }; 
 
+    if(getState("zipcode") !== zipcode) {
+      setState("zipcode", zipcode);
+    }
 
-    renderComponent(Weather, {forecast, zipcode, cityName, onSubmit});
+
+    renderComponent(App, {forecast, zipcode, cityName, onSubmit});
   }
 
 }
