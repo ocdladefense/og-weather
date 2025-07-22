@@ -12,7 +12,6 @@ export default function CurrentWeather(day, onItemClick, index) {
   div.setAttribute("data-index", index);
 
   // Construct the text content.
-  // How do we convert "2025-07-15" to "Tuesday"?
   let label = document.createElement("span");
   label.setAttribute("class","label");
   label.textContent = DateUtils.getWeekday(day.getLabel());
@@ -34,7 +33,7 @@ export default function CurrentWeather(day, onItemClick, index) {
   div.appendChild(document.createTextNode(" / "));
   div.appendChild(low);
 
-  div.addEventListener("click", onItemClick);
+  // div.addEventListener("click", onItemClick);
 
  return div;
 }

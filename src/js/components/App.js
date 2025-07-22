@@ -1,5 +1,6 @@
 import WeatherDetails from "./WeatherDetails";
 import Forecast from "./Forecast";  
+import CurrentWeather from "./CurrentWeather";
 import ZipCodeForm from "./ZipCodeForm";
 import {getState, renderComponent} from "./React";
 
@@ -13,6 +14,9 @@ import {getState, renderComponent} from "./React";
     // we should be able to acecess a new value for selectedDayIndex, if the value has changed.
 
     let container = document.createElement("div");
+
+    //let currentWeatherDiv = CurrentWeather(currentWeather); 
+    //container.appendChild(currentWeatherDiv);
 
     let form = ZipCodeForm({onSubmit, zipcode});
     container.appendChild(form);
