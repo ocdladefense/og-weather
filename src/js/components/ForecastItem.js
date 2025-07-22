@@ -1,9 +1,10 @@
-
-import WeatherConditionIcon from "./WeatherConditionIcon";
 import DateUtils from "../utils/DateUtils";
+import Forecast from "../models/Forecast";
+import WeatherConditionIcon from "./WeatherConditionIcon";
+
 
 // Render individual weather list item
-export default function WeatherListItem(day, onItemClick, index) {
+export default function ForecastItem(day, units, onItemClick, index) {
 
 
   // Creates div with its attributes.
@@ -14,17 +15,25 @@ export default function WeatherListItem(day, onItemClick, index) {
   // Construct the text content.
   let label = document.createElement("span");
   label.setAttribute("class","label");
-  label.textContent = day.getWeekdayLabel();
 
+  // Labels are currently stored in "YYYY-MM-DD" format.
+  // Show the weekday label, e.g., "Monday", "Tuesday", etc.
+  label.textContent = day.formatLabelAsWeekday() + ", " + DateUtils.getFormattedDate(day.getLabel());
+  console.log("ForecastItem label:", label.textContent);
+
+  // Create the icon for the weather condition.
+  // The icon is a small image that represents the weather condition for the day.
+  // It uses the WeatherConditionIcon component to render the icon based on the weather condition.
+  // The icon is displayed next to the label.
   let icon = WeatherConditionIcon({day: day, size: "small"});
 
   let high = document.createElement("span");
   high.setAttribute("class", "high");
-  high.textContent = day.getHigh();
+  high.textContent = day.getHigh(units) + " " + Forecast.getUnitOfMeasureSymbol(units, "temperature");
 
   let low = document.createElement("span");
   low.setAttribute("class", "low");
-  low.textContent = day.getLow();
+  low.textContent = day.getLow(units) + " " + Forecast.getUnitOfMeasureSymbol(units, "temperature");
 
   
   div.appendChild(label);

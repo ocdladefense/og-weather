@@ -1,8 +1,8 @@
+import bootstrap from "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/styles.scss";
-import "regenerator-runtime/runtime";
 
-import bootstrap from "bootstrap";
+
 import Controller from "./Controller.js";
 
 let controller = new Controller();

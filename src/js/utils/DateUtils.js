@@ -1,16 +1,25 @@
 // Utility functions that manipulate JS dates
 
-export default class DateUtils {
-  date;
+export default class DateUtils extends Date {
+
+
 
   constructor(date) {
-    this.date = date instanceof Date ? date : new Date(date);
+    super(date);
   }
 
-  // returns a string that represents the day of the week based on a JS date object
-  static getWeekday(date) {
+  // Returns a string that represents the day of the week based on a JS date object
+  getWeekday() {
 
-    let d = date instanceof Date ? date : new Date(date);
+
+    return DateUtils._getWeekday(this);
+  }
+
+
+  static _getWeekday(date) {
+
+    date = date instanceof DateUtils ? date : new DateUtils(date);
+
 
     const dayNames = [
       "Sunday",
@@ -22,20 +31,21 @@ export default class DateUtils {
       "Saturday",
     ];
 
-    return dayNames[d.getDay()];
+    return dayNames[date.getDay()+1];
   }
+
 
   // Function that converts a js date object into a string.
   toString() {
-    let year = this.date.getFullYear();
-    let month = String(this.date.getMonth() + 1).padStart(2, "0");
-    let day = String(this.date.getDate()).padStart(2, "0");
+    let year = this.getFullYear();
+    let month = String(this.getMonth() + 1).padStart(2, "0");
+    let day = String(this.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
   }
 
   // Returns a range of date utils objects.
-  static createRange(numDays = 5, startDate = new Date()) {
+  static createRange(startDate, numDays) {
     let range = [startDate];
 
     for (let i = 1; i < numDays; i++) {
@@ -49,10 +59,13 @@ export default class DateUtils {
     return range.map((date) => new DateUtils(date));
   }
 
-  
-  static getFormattedDate(selectedDay) {
-    return `${
-      new Date(selectedDay.label).getMonth() + 1
-    }/${new Date(selectedDay.label).getDate()}`;
+  // dateLabel is in the form of "2024-02-04"
+  static getFormattedDate(dateLabel) {
+    let d = new DateUtils(dateLabel);
+
+    let month = d.getMonth() + 1; // getMonth() returns 0-11
+    let day = d.getDate();
+
+    return [month,day].join("/");
   }
 }

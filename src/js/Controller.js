@@ -1,18 +1,16 @@
-const regeneratorRuntime = require("regenerator-runtime");
 
-// parseForecast is the ONLY export (default) from weatherParsing.js
-import parseForecast from "./api/forecastParsing";
-import parseWeather from "./api/currentWeatherParsing";
+import fiveDayForecast from "./api/openweathermap/fiveDayForecast";
+// import currentWeather from "./api/openweathermap/currentWeather";
+
 import App from "./components/App";
-import CurrentWeatherService from "./services/CurrentWeather";
-import Forecast from "./services/Forecast";
 import Geolocation from "./services/Geolocation";
+import Forecast from "./services/Forecast";
+// import CurrentWeatherService from "./services/CurrentWeather";
+
 import {renderComponent, getState, setState} from "./components/React";
 
-// sample openweathermap weather api call
-//https://api.openweathermap.org/data/2.5/forecast?units=imperial&lat=43.9698&lon=-123.2006&appid=e366707bc2ea3e949fb1c0a16ce76d59
-// sample openweathermap geolocation api call
-// http://api.openweathermap.org/geo/1.0/zip?zip=97405,US&appid=e366707bc2ea3e949fb1c0a16ce76d59
+
+
 
 export default class Controller {
 
@@ -29,30 +27,31 @@ export default class Controller {
   }
 
   // Gets called on the first render, and every time the user submits a new zipcode.
-  render(forecast = [], currentWeather = null, zipcode = "", cityName = "") {
+  render(forecast = [], currentWeather = null, units, zipcode = "", cityName = "") {
     let onSubmit = async (e) => {
       e.preventDefault();
       // use e.target.zipcode.value to get the zipcode from the form.
       let zipcode = e.target.zipcode.value;
 
-      let forecastService = new Forecast();
       let geolocationService = new Geolocation();
-      let currentWeatherService = new CurrentWeatherService();
+      let forecastService = new Forecast();
+      
+      // let currentWeatherService = new CurrentWeatherService();
       let units = "imperial"; // or "metric", depending on your preference
 
 
       let { city, lat, lng } = await geolocationService.load(zipcode);
-
-
       let { data, timezoneOffset } = await forecastService.load(lat,lng,units);
       // Get the current weather using the appropriate endpoint from the OpenWeatherMap API.
       //{lat, lng} = await currentWeatherService.load(lat, lng, units);
 
-      let forecast = parseForecast(data, timezoneOffset);
+      // Assume the customer has chosen a 5-day forecast.
+      // The product may have other options (10-day forecast, 30-day forecast, etc.).
 
-      let weather = parseWeather(data);
+      let forecast = fiveDayForecast(data, timezoneOffset);
+      //let weather = currentWeather(data);
 
-      this.render(forecast, weather, zipcode, city);
+      this.render(forecast, null, units, zipcode, city);
     }; 
 
     if(getState("zipcode") !== zipcode) {
@@ -60,7 +59,7 @@ export default class Controller {
     }
 
 
-    renderComponent(App, {forecast, currentWeather, zipcode, cityName, onSubmit});
+    renderComponent(App, {forecast, currentWeather, units, zipcode, cityName, onSubmit});
   }
 
 }

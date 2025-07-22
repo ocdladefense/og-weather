@@ -1,9 +1,10 @@
 import DateUtils from "../utils/DateUtils";
 import WeatherConditionIcon from "./WeatherConditionIcon";
+import Forecast from "../models/Forecast";
 
  // Render detailed weather information for the selected day
-  export default function WeatherDetails(day, cityName = "") {
-    let formattedDate = DateUtils.getFormattedDate(day);
+  export default function WeatherDetails({day, units, cityName = ""}) {
+    let formattedDate = DateUtils.getFormattedDate(day.getLabel());
 
     // Div
     let dayDiv = document.createElement("div");
@@ -24,7 +25,11 @@ import WeatherConditionIcon from "./WeatherConditionIcon";
 
     // High/Low temp paragraph
     let pTemp = document.createElement("p");
-    pTemp.textContent = `High: ${day.getHigh()}, Low: ${day.getLow()}`;
+    let symbol = Forecast.getUnitOfMeasureSymbol(units, "temperature");
+    let lowTempText = `Low: ${day.getLow(units)}`;
+    let highTempText = `High: ${day.getHigh(units)}`;
+
+    pTemp.textContent = [highTempText,symbol,"/",lowTempText,symbol].join(" ");
     dayDiv.appendChild(pTemp);
 
     // Humidity, wind, and pressue paragraph

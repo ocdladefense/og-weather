@@ -10,9 +10,6 @@ export default class Forecast {
   // Human readable label for the forecast, e.g., "Monday, January 1st"
   label;
 
-  #dayDate;
-
-  //units;
 
   // i.e., the forecast for a single day, takes in a collection of samples.
   constructor(samples, timezoneOffset) {
@@ -22,6 +19,8 @@ export default class Forecast {
     //this.units = units;
   }
 
+
+  
   setLabel(label) {
     this.label = label;
   }
@@ -30,38 +29,27 @@ export default class Forecast {
     return this.label;
   }
 
- setDayDate(dateObject) {
-    this.#dayDate = dateObject;
-    console.log("Forecast.setDayDate: Storing #dayDate as:", this.#dayDate.toString());
+  formatLabelAsWeekday() {
+    console.log("ForecastItem label:", this.label);
+    return DateUtils._getWeekday(this.label);
   }
 
-  getWeekdayLabel() {
-    if (this.#dayDate instanceof Date) {
-      return DateUtils.getWeekday(this.#dayDate);
-    }
-    if (this.label) {
-        return DateUtils.getWeekday(new Date(this.label));
-    }
-    return "";
-  }
 
-  setUnits(units){
-    this.units = units;
-  }
 
-  getUnits() {
-    //return this.units === "Imperial" ? "°F" : "°C";
 
-    return  "°F"
-  } 
 
   
-  convertTemperature(temp) {
-    if (this.units === "metric") {
+  static convertTemperature(temp, unitsFrom, unitsTo) {
+
+    if(unitsFrom === unitsTo) {
+      return temp;
+    }
+    if (unitsFrom === "metric" && unitsTo === "imperial") {
       return (temp - 32) * 5 / 9;
     }
-    return temp; // already in Fahrenheit
+
   }
+
 
   // Function that finds the closest hour match, because a match isn't always gonna be there since data is only given every 3 hours.
   findSampleAtHourApprox(hour, units = "imperial") {
@@ -87,25 +75,11 @@ export default class Forecast {
 
     let sample = this.findSampleAtHourApprox(hour, units)[1];
 
-    return Math.round(sample.getTemperature()) + " " + this.getUnits();
-  }
-
-  getFormattedDate() {
-    return DateUtils.getFormattedDate(this.label);
+    return Math.round(sample.getTemperature());
   }
 
 
 
-  // Function that finds the minimum temp in a samples array.
-  findMinTemp() {
-    return Math.min(...this.samples.map((s) => s.getTemperature()));
-  }
-
-
-  // Function that finds the maximum temp in a samples array.
-  findMaxTemp() {
-    return Math.max(...this.samples.map((s) => s.getTemperature()));
-  }
 
 
   getIcon() {
@@ -115,14 +89,26 @@ export default class Forecast {
   }
 
 
-  getHigh() {
-    return Math.round(this.findMaxTemp()) + " " + this.getUnits();
+  getHigh(units) {
+    let tempUnits = units === "metric" ? "celsius" : "fahrenheit"; 
+    let high = Math.max(...this.samples.map((s) => Forecast.convertTemperature(s.getTemperature(), s.getTempUnits(), tempUnits)));
+
+    return Math.round(high);
   }
 
 
-  getLow() {
-    return Math.round(this.findMinTemp()) + " " + this.getUnits();
+  getLow(units) {
+
+    let tempUnits = units === "metric" ? "celsius" : "fahrenheit"; 
+
+    let low = Math.min(...this.samples.map((s) => Forecast.convertTemperature(s.getTemperature(), s.getTempUnits(), tempUnits)));
+    return Math.round(low);
   }
+
+  static getUnitOfMeasureSymbol(units, type) {
+    return type === "temperature" ? (units === "metric" ? "°C" : "°F") : (units === "metric" ? "m/s" : "mph");
+  }
+
 
   getHumidity() {
     let noonEntry = this.findSampleAtHourApprox(12)[1];

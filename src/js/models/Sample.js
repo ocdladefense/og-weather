@@ -1,41 +1,66 @@
+import DateUtils from "../utils/DateUtils";
+
 
 export default class Sample {
 
-    sample;
-    
-    dt;
-    localHour;
+    #data;
+
+    tempUnits;
+
+    windUnits;
+
+    #date;
 
     temp;
+
     wind;
+
     humidity;
+
     pressure;
+
     description;
+
     icon;
     
 
 
-    constructor(sample, timezoneOffset = 0){
-        this.sample = sample;
+    constructor(data, timezoneOffset = 0){
+        this.#data = data;
+    }
 
-        this.timezoneOffset = timezoneOffset;
-
+    getData() {
+        return this.#data;
     }
 
     getDateTime(){
-        return this.dt;
+        return this.#date;
+    }
+
+    setDateTime(date) {
+        this.#date = new DateUtils(date);
     }
 
     getLocalHour() {
-        return this.localHour;
+        return this.#date;
     }
     
     getTemperature(){
         return this.temp;
     }
 
+    setTemperature(temp, tempUnits = "F") {
+        this.temp = temp;
+        this.tempUnits = tempUnits;
+    }
+
     getWind() {
         return this.wind;
+    }
+
+    setWind(wind, windUnits = "mph") {
+        this.wind = wind;
+        this.windUnits = windUnits;
     }
 
     getHumidity() {
@@ -54,9 +79,19 @@ export default class Sample {
         return this.icon;
     }
 
-    static fromOpenWeatherMap(data, timezoneOffset = 0){
+    getTempUnits() {
+        return this.tempUnits;
+    }
+
+    getWindUnits() {
+        return this.windUnits;
+    }
+
+    static fromOpenWeatherMap(data, units = "standard", timezoneOffset = 0){
         let sample = new Sample(data, timezoneOffset);
-        sample.dt = data.dt ?? null;
+        sample.#date = new DateUtils((data.dt + timezoneOffset) * 1000);
+        sample.tempUnits = units == "metric" ? "celsius" : "fahrenheit"; 
+        sample.windUnits = units == "metric" ? "m/s" : "mph"; 
         sample.temp = data.main.temp ?? null;
         sample.wind = data.wind.speed ?? null;
         sample.humidity = data.main.humidity ?? null;
@@ -64,7 +99,6 @@ export default class Sample {
         sample.description = data.weather?.[0]?.description ?? "";
         sample.icon = data.weather?.[0]?.icon ?? "";
 
-        sample.localHour = new Date((sample.dt + timezoneOffset) * 1000);
 
         return sample;
     }
