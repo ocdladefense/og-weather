@@ -7,12 +7,6 @@ export default class DateUtils {
     this.date = date instanceof Date ? date : new Date(date);
   }
 
-  static fromUnixTimestamp(unixTimestamp, timezoneOffset = 0) {
-    let date = new Date((unixTimestamp + timezoneOffset) * 1000);
-
-    return new DateUtils(date);
-  }
-
   // returns a string that represents the day of the week based on a JS date object
   static getWeekday(date) {
 

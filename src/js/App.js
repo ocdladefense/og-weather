@@ -41,14 +41,7 @@ export default class App {
       let forecast = parseForecast(data, timezoneOffset);
 
       this.render(forecast, zipcode, city);
-    };
-
-    // The forecast does render the first time, only with an empty array :-)
-
-    // Set the first selected day only once forecast is available
-    if (forecast.length > 0 && getState("selectedDayIndex") == null) {
-      setState("selectedDayIndex", 0);
-    }
+    }; 
 
 
     renderComponent(Weather, {forecast, zipcode, cityName, onSubmit});

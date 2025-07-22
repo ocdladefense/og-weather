@@ -4,6 +4,7 @@ export default class Sample {
     sample;
     
     dt;
+    localHour;
 
     temp;
     wind;
@@ -14,13 +15,21 @@ export default class Sample {
     
 
 
-    constructor(sample){
+    constructor(sample, timezoneOffset = 0){
         this.sample = sample;
+
+        this.timezoneOffset = timezoneOffset;
+
     }
 
     getDateTime(){
         return this.dt;
     }
+
+    getLocalHour() {
+        return this.localHour;
+    }
+    
     getTemperature(){
         return this.temp;
     }
@@ -45,8 +54,8 @@ export default class Sample {
         return this.icon;
     }
 
-    static fromOpen(data){
-        let sample = new Sample(data);
+    static fromOpenWeatherMap(data, timezoneOffset = 0){
+        let sample = new Sample(data, timezoneOffset);
         sample.dt = data.dt ?? null;
         sample.temp = data.main.temp ?? null;
         sample.wind = data.wind.speed ?? null;
@@ -54,6 +63,8 @@ export default class Sample {
         sample.pressure = data.main.pressure ?? null;
         sample.description = data.weather?.[0]?.description ?? "";
         sample.icon = data.weather?.[0]?.icon ?? "";
+
+        sample.localHour = new Date((sample.dt + timezoneOffset) * 1000);
 
         return sample;
     }

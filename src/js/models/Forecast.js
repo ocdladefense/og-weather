@@ -10,10 +10,16 @@ export default class Forecast {
   // Human readable label for the forecast, e.g., "Monday, January 1st"
   label;
 
+  #dayDate;
+
+  //units;
+
   // i.e., the forecast for a single day, takes in a collection of samples.
   constructor(samples, timezoneOffset) {
-    this.samples = samples.map(s => s instanceof Sample ? s : Sample.fromOpen(s));
-    this.timezoneOffset = timezoneOffset;
+
+    this.samples = samples.map(s => s instanceof Sample ? s : Sample.fromOpenWeatherMap(s, timezoneOffset));
+
+    //this.units = units;
   }
 
   setLabel(label) {
@@ -24,12 +30,48 @@ export default class Forecast {
     return this.label;
   }
 
+ setDayDate(dateObject) {
+    this.#dayDate = dateObject;
+    console.log("Forecast.setDayDate: Storing #dayDate as:", this.#dayDate.toString());
+  }
+
+  getWeekdayLabel() {
+    if (this.#dayDate instanceof Date) {
+      return DateUtils.getWeekday(this.#dayDate);
+    }
+    if (this.label) {
+        return DateUtils.getWeekday(new Date(this.label));
+    }
+    return "";
+  }
+
+  setUnits(units){
+    this.units = units;
+  }
+
+  getUnits() {
+    //return this.units === "Imperial" ? "°F" : "°C";
+
+    return  "°F"
+  } 
+
+  
+  convertTemperature(temp) {
+    if (this.units === "metric") {
+      return (temp - 32) * 5 / 9;
+    }
+    return temp; // already in Fahrenheit
+  }
+
   // Function that finds the closest hour match, because a match isn't always gonna be there since data is only given every 3 hours.
   findSampleAtHourApprox(hour, units = "imperial") {
     // let unitsLabel = units === "metric" ? "°C" : "°F";
-
+      if (!this.samples || this.samples.length === 0) {
+    console.warn("No samples available in Forecast");
+    return null;
+  }
     let diffs = this.samples.map((sample) => {
-      let localHour = new Date((sample.getDateTime()+ this.timezoneOffset) * 1000).getHours();
+      let localHour = sample.getLocalHour().getHours();
       return [Math.abs(localHour - hour), sample];
     });
    
@@ -37,12 +79,13 @@ export default class Forecast {
 
     let [diff, sample] = diffs[0];
 
-    return sample;
+    return [diff, sample];
 
   }
 
   findTempAtHourApprox(hour, units = "imperial"){
-    let sample = this.findSampleAtHourApprox(hour, units);
+
+    let sample = this.findSampleAtHourApprox(hour, units)[1];
 
     return Math.round(sample.getTemperature()) + " " + this.getUnits();
   }
@@ -56,7 +99,6 @@ export default class Forecast {
   // Function that finds the minimum temp in a samples array.
   findMinTemp() {
     return Math.min(...this.samples.map((s) => s.getTemperature()));
-    // Loop through every sample entry, extract its temp_min, and return the smallest one
   }
 
 
@@ -67,7 +109,7 @@ export default class Forecast {
 
 
   getIcon() {
-    let noonEntry = this.findSampleAtHourApprox(12);
+    let noonEntry = this.findSampleAtHourApprox(12)[1];
 
     return noonEntry.getIcon();
   }
@@ -82,30 +124,26 @@ export default class Forecast {
     return Math.round(this.findMinTemp()) + " " + this.getUnits();
   }
 
-  getUnits() {
-    return "°F";
-  }
-
   getHumidity() {
-    let noonEntry = this.findSampleAtHourApprox(12);
+    let noonEntry = this.findSampleAtHourApprox(12)[1];
     return noonEntry.getHumidity();
   }
 
 
   getWind() {
-    let noonEntry = this.findSampleAtHourApprox(12);
+    let noonEntry = this.findSampleAtHourApprox(12)[1];
     return noonEntry.getWind();  
   }
 
 
   getPressure() {
-    let noonEntry = this.findSampleAtHourApprox(12);
+    let noonEntry = this.findSampleAtHourApprox(12)[1];
     return noonEntry.getPressure();
   }
 
 
   getDescription() {
-    let noonEntry = this.findSampleAtHourApprox(12);
+    let noonEntry = this.findSampleAtHourApprox(12)[1];
     return noonEntry.getDescription();
   }
 
@@ -124,6 +162,5 @@ export default class Forecast {
         return null;
     }
   }
-
 
 }

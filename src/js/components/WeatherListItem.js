@@ -12,10 +12,9 @@ export default function WeatherListItem(day, onItemClick, index) {
   div.setAttribute("data-index", index);
 
   // Construct the text content.
-  // How do we convert "2025-07-15" to "Tuesday"?
   let label = document.createElement("span");
   label.setAttribute("class","label");
-  label.textContent = DateUtils.getWeekday(day.getLabel());
+  label.textContent = day.getWeekdayLabel();
 
   let icon = WeatherIcon(day);
 
