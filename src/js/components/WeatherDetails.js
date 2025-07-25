@@ -51,13 +51,15 @@ import Forecast from "../models/Forecast";
 
     // Morning and day temp paragraph
     let parts = ["morning","day","evening","night"].map(function(part) { 
+      let symbol = Forecast.getUnitOfMeasureSymbol(units, "temperature");
+    
       let p = document.createElement("p");
       p.setAttribute("id", `temp-${part}`);
 
       let label = `${part.charAt(0).toUpperCase() + part.slice(1)} Temp: `;
-      let value = day.getTemp(part);
+      let value = day.getTemp(part, units);
 
-      p.textContent = `${label}${value}`;
+      p.textContent = `${label}${value}${symbol}`;
 
       return p;
     });

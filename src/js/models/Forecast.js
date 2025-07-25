@@ -73,7 +73,13 @@ export default class Forecast {
 
     let sample = this.findSampleAtHourApprox(hour, units)[1];
 
-    return Math.round(sample.getTemperature());
+    let tempUnits = units === "metric" ? "celsius" : "fahrenheit"; 
+
+    let convertedTemp = Forecast.convertTemperature(sample.getTemperature(), sample.getTempUnits(), tempUnits);
+
+    return Math.round(convertedTemp);
+
+    //...this.samples.map((s) => Forecast.convertTemperature(s.getTemperature(), s.getTempUnits(), tempUnits)));
   }
 
 
@@ -132,16 +138,16 @@ export default class Forecast {
   }
 
 
-  getTemp(partOfDayString) {
+  getTemp(partOfDayString, units) {
     switch (partOfDayString) {
       case "morning":
-        return this.findTempAtHourApprox(6);
+        return this.findTempAtHourApprox(6, units);
       case "day":
-        return this.findTempAtHourApprox(12);
+        return this.findTempAtHourApprox(12, units);
       case "evening":
-        return this.findTempAtHourApprox(18);
+        return this.findTempAtHourApprox(18, units);
       case "night":
-        return this.findTempAtHourApprox(21);
+        return this.findTempAtHourApprox(21,units);
       default:
         return null;
     }
