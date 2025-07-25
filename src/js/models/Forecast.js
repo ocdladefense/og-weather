@@ -30,7 +30,6 @@ export default class Forecast {
   }
 
   formatLabelAsWeekday() {
-    console.log("ForecastItem label:", this.label);
     return DateUtils._getWeekday(this.label);
   }
 

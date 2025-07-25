@@ -41,6 +41,8 @@ export default class Controller {
 
 
       let { city, lat, lng } = await geolocationService.load(zipcode);
+      lat = 22.27832;
+      lng = 114.17469;
       let { data, timezoneOffset } = await forecastService.load(lat,lng,units);
       // Get the current weather using the appropriate endpoint from the OpenWeatherMap API.
       //{lat, lng} = await currentWeatherService.load(lat, lng, units);

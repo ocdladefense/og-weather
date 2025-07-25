@@ -5,6 +5,7 @@ import Forecast from "../models/Forecast";
  // Render detailed weather information for the selected day
   export default function WeatherDetails({day, units, cityName = ""}) {
     let formattedDate = DateUtils.getFormattedDate(day.getLabel());
+    console.log(day.getLabel());
 
     // Div
     let dayDiv = document.createElement("div");

@@ -30,7 +30,6 @@ import {getState, renderComponent} from "./React";
 
 
     if (selectedDayIndex != null) {
-      console.log("forecast sample:", forecast[0]);
       let details = WeatherDetails({day: forecast[selectedDayIndex], units, cityName});
       container.appendChild(details);
     }

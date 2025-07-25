@@ -62,21 +62,30 @@ export default class DateUtils extends Date {
     return range.map((date) => new DateUtils(date));
   }
 
+
+  static toDateTimeString(dateString, timeString = "00:00:00.000"){
+    return dateString + "T" + timeString;
+  }
+
+
+
   // dateLabel is in the form of "2024-02-04"
   static getFormattedDate(dateLabel) {
 
-    let parts = dateLabel.split('-');
-    let year = parseInt(parts[0]);
-    let monthIndex = parseInt(parts[1]) - 1; // Month is 0-indexed
+    // let parts = dateLabel.split('-');
+    // let year = parseInt(parts[0]);
+    // let monthIndex = parseInt(parts[1]) - 1; // Month is 0-indexed
 
-    let day = parseInt(parts[2]);
+    // let day = parseInt(parts[2]);
+
 
     // Create a Date object representing the start of the day in local time
-    let d = new DateUtils(year, monthIndex, day); 
+    let d = new DateUtils(DateUtils.toDateTimeString(dateLabel)); 
 
 
     let month = d.getMonth() + 1;
-    return [month,day].join("/");
+    let day = d.getDate();
 
+    return [month,day].join("/");
   }
 }

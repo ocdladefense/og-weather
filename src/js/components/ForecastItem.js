@@ -19,7 +19,6 @@ export default function ForecastItem(day, units, onItemClick, index) {
   // Labels are currently stored in "YYYY-MM-DD" format.
   // Show the weekday label, e.g., "Monday", "Tuesday", etc.
   label.textContent = day.formatLabelAsWeekday();
-  console.log("ForecastItem label:", label.textContent);
 
   // Create the icon for the weather condition.
   // The icon is a small image that represents the weather condition for the day.

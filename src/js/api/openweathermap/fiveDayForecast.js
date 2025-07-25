@@ -18,6 +18,7 @@ export default function fiveDayForecast(data, units, timezoneOffset = 0) {
   let groups = samples.groupBy("date");
 
   const NUMBER_OF_DAYS = 5;
+  // TODO: pass in current date time with respect to timezone offset.
   let range = DateUtils.createRange(new Date(), NUMBER_OF_DAYS);
 
   let keys = range.map((date) => {
