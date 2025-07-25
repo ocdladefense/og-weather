@@ -11,12 +11,14 @@ export default class DateUtils extends Date {
   // Returns a string that represents the day of the week based on a JS date object
   getWeekday() {
 
-
     return DateUtils._getWeekday(this);
+
   }
 
 
+  // takes in a date object, not a string
   static _getWeekday(date) {
+    console.log(date);
 
     date = date instanceof DateUtils ? date : new DateUtils(date);
 
@@ -29,6 +31,7 @@ export default class DateUtils extends Date {
       "Thursday",
       "Friday",
       "Saturday",
+      "Sunday",
     ];
 
     return dayNames[date.getDay()+1];
@@ -61,11 +64,19 @@ export default class DateUtils extends Date {
 
   // dateLabel is in the form of "2024-02-04"
   static getFormattedDate(dateLabel) {
-    let d = new DateUtils(dateLabel);
 
-    let month = d.getMonth() + 1; // getMonth() returns 0-11
-    let day = d.getDate();
+    let parts = dateLabel.split('-');
+    let year = parseInt(parts[0]);
+    let monthIndex = parseInt(parts[1]) - 1; // Month is 0-indexed
 
+    let day = parseInt(parts[2]);
+
+    // Create a Date object representing the start of the day in local time
+    let d = new DateUtils(year, monthIndex, day); 
+
+
+    let month = d.getMonth() + 1;
     return [month,day].join("/");
+
   }
 }

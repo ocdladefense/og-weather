@@ -36,8 +36,6 @@ export default class Forecast {
 
 
 
-
-
   
   static convertTemperature(temp, unitsFrom, unitsTo) {
 

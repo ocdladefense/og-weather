@@ -32,10 +32,22 @@ import Forecast from "../models/Forecast";
     pTemp.textContent = [highTempText,symbol,"/",lowTempText,symbol].join(" ");
     dayDiv.appendChild(pTemp);
 
-    // Humidity, wind, and pressue paragraph
-    let pExtras = document.createElement("p");
-    pExtras.textContent = `Humidity: ${day.getHumidity()}%, Wind: ${day.getWind()} mph, Atmospheric Pressure: ${day.getPressure()} hPa`;
-    dayDiv.appendChild(pExtras);
+    // Humidity paragraph
+    let pHum = document.createElement("p");
+    pHum.textContent = `Humidity: ${day.getHumidity()}%`;
+    dayDiv.appendChild(pHum);
+
+    // Wind paragraph
+    let pWind =document.createElement("p");
+    pWind.textContent = `Wind: ${day.getWind()} mph`;
+    dayDiv.appendChild(pWind);
+   
+    // Pressure Paragraph
+    let pPres =document.createElement("p");
+    pPres.textContent = `Atmospheric Pressure: ${day.getPressure()} hPa`;
+    dayDiv.appendChild(pPres);
+    
+
 
     // Morning and day temp paragraph
     let parts = ["morning","day","evening","night"].map(function(part) { 

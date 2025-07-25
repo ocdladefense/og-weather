@@ -90,6 +90,7 @@ export default class Sample {
     static fromOpenWeatherMap(data, units = "standard", timezoneOffset = 0){
         let sample = new Sample(data, timezoneOffset);
         sample.#date = new DateUtils((data.dt + timezoneOffset) * 1000);
+        console.log(sample.#date);
         sample.tempUnits = units == "metric" ? "celsius" : "fahrenheit"; 
         sample.windUnits = units == "metric" ? "m/s" : "mph"; 
         sample.temp = data.main.temp ?? null;
