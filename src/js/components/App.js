@@ -1,4 +1,5 @@
 import WeatherDetails from "./WeatherDetails";
+import CurrentWeather from "./CurrentWeather";
 import Forecast from "./Forecast";  
 import ZipCodeForm from "./ZipCodeForm";
 import {getState, renderComponent} from "./React";
@@ -6,7 +7,7 @@ import {getState, renderComponent} from "./React";
 
 
 
-  export default function App({ forecast, units, onSubmit, zipcode, cityName }) {
+  export default function App({ forecast, currentWeather, units, onSubmit, zipcode, cityName }) {
 
 
     let selectedDayIndex = getState("selectedDayIndex");
@@ -14,8 +15,8 @@ import {getState, renderComponent} from "./React";
 
     let container = document.createElement("div");
 
-    //let currentWeatherDiv = CurrentWeather(currentWeather); 
-    //container.appendChild(currentWeatherDiv);
+    let currentWeatherDiv = CurrentWeather(currentWeather); 
+    container.appendChild(currentWeatherDiv);
 
     let form = ZipCodeForm({onSubmit, zipcode});
     container.appendChild(form);
@@ -24,7 +25,7 @@ import {getState, renderComponent} from "./React";
 
 
     let theList = Forecast({forecast, units, rerender: () => {
-      renderComponent(App, {forecast, onSubmit, zipcode, cityName});
+      renderComponent(App, {forecast, currentWeather, units, onSubmit, zipcode, cityName});
     }});
     container.appendChild(theList);
 

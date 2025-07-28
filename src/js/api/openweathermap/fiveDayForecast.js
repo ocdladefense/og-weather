@@ -19,7 +19,17 @@ export default function fiveDayForecast(data, units, timezoneOffset = 0) {
 
   const NUMBER_OF_DAYS = 5;
   // TODO: pass in current date time with respect to timezone offset.
-  let range = DateUtils.createRange(new Date(), NUMBER_OF_DAYS);
+
+  let localDate = new Date(Date.now() + timezoneOffset * 1000);
+  // const timezoneOffseet = 28800; // seconds for Hong Kong
+  // const localHKTime = new Date(Date.now() + timezoneOffseet * 1000);
+
+  // console.log("Local Hong Kong Time:", localHKTime); 
+
+  // console.log("Offset (sec):", timezoneOffset);
+  // console.log("Local date:", localDate.toString());
+
+  let range = DateUtils.createRange(localDate, NUMBER_OF_DAYS);
 
   let keys = range.map((date) => {
     return date.toString();

@@ -12,8 +12,8 @@ export default class Forecast {
     let data = await response.json();
 
     return {
-      timezoneOffset: data.city.timezone,
       data: data.list,
+      timezoneOffset: data.city.timezone,
     };
   }
 }

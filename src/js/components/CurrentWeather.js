@@ -1,39 +1,34 @@
-
 import WeatherConditionIcon from "./WeatherConditionIcon";
-import DateUtils from "../utils/DateUtils";
 
-// Render individual weather list item
-export default function CurrentWeather(day, onItemClick, index) {
+export default function CurrentWeather(day) {
+  if (!day) return document.createElement("div");
 
-
-  // Creates div with its attributes.
   let div = document.createElement("div");
-  div.setAttribute("class", "weather-list-item");
-  div.setAttribute("data-index", index);
+  div.className = "current-weather-card";
 
-  // Construct the text content.
-  let label = document.createElement("span");
-  label.setAttribute("class","label");
-  label.textContent = DateUtils.getWeekday(day.getLabel());
+  let city = document.createElement("h2");
+  city.textContent = day.city || "Current Weather";
 
-  let icon = WeatherConditionIcon({day, size: "medium"});
+  let icon = WeatherConditionIcon({ day, size: "large" });
 
-  let high = document.createElement("span");
-  high.setAttribute("class", "high");
-  high.textContent = day.getHigh();
+  let description = document.createElement("p");
+  description.textContent = day.getDescription(); // Make sure Sample has this
 
-  let low = document.createElement("span");
-  low.setAttribute("class", "low");
-  low.textContent = day.getLow();
+  let temp = document.createElement("p");
+  temp.textContent = `Temp: ${day.getTemperature()}°`;
 
-  
-  div.appendChild(label);
+  let feels = document.createElement("p");
+  feels.textContent = `Feels like: ${day.getFeelsLike()}°`;
+
+  let humidity = document.createElement("p");
+  humidity.textContent = `Humidity: ${day.getHumidity()}%`;
+
+  div.appendChild(city);
   div.appendChild(icon);
-  div.appendChild(high);
-  div.appendChild(document.createTextNode(" / "));
-  div.appendChild(low);
+  div.appendChild(description);
+  div.appendChild(temp);
+  div.appendChild(feels);
+  div.appendChild(humidity);
 
-  // div.addEventListener("click", onItemClick);
-
- return div;
+  return div;
 }

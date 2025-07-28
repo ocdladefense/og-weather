@@ -1,11 +1,11 @@
 
 import fiveDayForecast from "./api/openweathermap/fiveDayForecast";
-// import currentWeather from "./api/openweathermap/currentWeather";
+import currentWeather from "./api/openweathermap/currentWeather";
 
 import App from "./components/App";
 import Geolocation from "./services/Geolocation";
 import Forecast from "./services/Forecast";
-// import CurrentWeatherService from "./services/CurrentWeather";
+import CurrentWeatherService from "./services/CurrentWeather";
 
 import {renderComponent, getState, setState} from "./components/React";
 
@@ -35,25 +35,26 @@ export default class Controller {
 
       let geolocationService = new Geolocation();
       let forecastService = new Forecast();
-      
-      // let currentWeatherService = new CurrentWeatherService();
+      let currentWeatherService = new CurrentWeatherService();
+
       let units = "imperial"; // or "metric", depending on your preference
 
 
       let { city, lat, lng } = await geolocationService.load(zipcode);
-      lat = 22.27832;
-      lng = 114.17469;
+      // lat = 22.27832;
+      // lng = 114.17469;
       let { data, timezoneOffset } = await forecastService.load(lat,lng,units);
+
       // Get the current weather using the appropriate endpoint from the OpenWeatherMap API.
-      //{lat, lng} = await currentWeatherService.load(lat, lng, units);
+      let currentWeather = await currentWeatherService.load(lat, lng, units);
 
       // Assume the customer has chosen a 5-day forecast.
       // The product may have other options (10-day forecast, 30-day forecast, etc.).
 
-      let forecast = fiveDayForecast(data, timezoneOffset);
-      //let weather = currentWeather(data);
+      let forecast = fiveDayForecast(data, units, timezoneOffset);
+      let weather = currentWeather(data);
 
-      this.render(forecast, null, units, zipcode, city);
+      this.render(forecast, weather, null, units, zipcode, city);
     }; 
 
     if(getState("zipcode") !== zipcode) {
