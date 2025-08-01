@@ -15,14 +15,13 @@ import {getState, renderComponent} from "./React";
 
     let container = document.createElement("div");
 
-    let currentWeatherDiv = CurrentWeather(currentWeather); 
-    container.appendChild(currentWeatherDiv);
 
     let form = ZipCodeForm({onSubmit, zipcode});
     container.appendChild(form);
 
     // Render the current weather
-
+    let currentWeatherDiv = CurrentWeather(currentWeather); 
+    container.appendChild(currentWeatherDiv);
 
     let theList = Forecast({forecast, units, rerender: () => {
       renderComponent(App, {forecast, currentWeather, units, onSubmit, zipcode, cityName});

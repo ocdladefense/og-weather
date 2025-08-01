@@ -23,6 +23,7 @@ export default class Sample {
 
     icon;
     
+    feelsLike;
 
 
     constructor(data, timezoneOffset = 0){
@@ -75,6 +76,10 @@ export default class Sample {
         return this.description;
     }
 
+    getFeelsLike(){
+        return this.feelsLike;
+    }
+
     getIcon(){
         return this.icon;
     }
@@ -98,6 +103,7 @@ export default class Sample {
         sample.pressure = data.main.pressure ?? null;
         sample.description = data.weather?.[0]?.description ?? "";
         sample.icon = data.weather?.[0]?.icon ?? "";
+        sample.feelsLike = data.feels_like ?? null;
 
 
         return sample;

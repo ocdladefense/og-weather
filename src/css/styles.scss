@@ -98,5 +98,14 @@ body {
   .weather img {
       vertical-align: middle;
   }
-
-
+  
+.current-weather {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 2px solid #000;
+  border-radius: 20px;
+  background-color: #fff;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}

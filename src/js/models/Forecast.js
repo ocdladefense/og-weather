@@ -136,6 +136,11 @@ export default class Forecast {
     return noonEntry.getDescription();
   }
 
+  getFeelsLike(){
+    let noonEntry = this.findSampleAtHourApprox(12)[1];
+    return noonEntry.getFeelsLike();
+  }
+
 
   getTemp(partOfDayString, units) {
     switch (partOfDayString) {
