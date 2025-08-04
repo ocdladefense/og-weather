@@ -1,5 +1,4 @@
-import Forecast from "./Forecast.js";
-import DateUtils from "../utils/DateUtils.js";
+
 import Sample from "./Sample.js";
 
 // Class that contains all the forecast array data.
@@ -40,8 +39,4 @@ export default class SampleCollection {
       return d.toString();
     });
   }
-
-  
-
-
 }

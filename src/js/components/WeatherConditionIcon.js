@@ -1,6 +1,4 @@
 
-
-
 export default function WeatherConditionIcon({day}) {
 
     let img = document.createElement("img");

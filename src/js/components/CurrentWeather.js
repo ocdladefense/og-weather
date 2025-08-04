@@ -1,6 +1,6 @@
 import WeatherConditionIcon from "./WeatherConditionIcon";
 
-export default function CurrentWeather(day) {
+export default function CurrentWeather(day, units) {
   if (!day) return document.createElement("div");
 
   let div = document.createElement("div");
@@ -17,8 +17,8 @@ export default function CurrentWeather(day) {
   let temp = document.createElement("p");
   temp.textContent = `Temp: ${day.getTemperature()}°`;
 
- let feels = document.createElement("p");
- feels.textContent = `Feels like: ${day.getFeelsLike()}°`;
+  let feels = document.createElement("p");
+  feels.textContent = `Feels like: ${day.getFeelsLike(units)}`;
 
   let humidity = document.createElement("p");
   humidity.textContent = `Humidity: ${day.getHumidity()}%`;

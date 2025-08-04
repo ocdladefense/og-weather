@@ -8,12 +8,11 @@ export default class CurrentWeatherService {
   async load(lat, lng) {
     let response = await fetch(`${weatherUrl}lat=${lat}&lon=${lng}&${apikey}`);
     let data = await response.json();
-
-    //return data; 
-    return new Sample(data); // Wrap raw weather in Sample
+ 
     
-    //{   timezoneOffset: data.city.timezone,
-    //   data: data.main,
-    //};
+    // Wrap raw weather data in Sample
+    // Be sure to call fromOpenWeatherMap to populate the data.
+    return Sample.fromOpenWeatherMap(data, "imperial");
+
   }
 }

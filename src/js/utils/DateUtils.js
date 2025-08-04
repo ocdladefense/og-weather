@@ -72,14 +72,6 @@ export default class DateUtils extends Date {
   // dateLabel is in the form of "2024-02-04"
   static getFormattedDate(dateLabel) {
 
-    // let parts = dateLabel.split('-');
-    // let year = parseInt(parts[0]);
-    // let monthIndex = parseInt(parts[1]) - 1; // Month is 0-indexed
-
-    // let day = parseInt(parts[2]);
-
-
-    // Create a Date object representing the start of the day in local time
     let d = new DateUtils(DateUtils.toDateTimeString(dateLabel)); 
 
 

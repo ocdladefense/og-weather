@@ -10,7 +10,7 @@ import DateUtils from "../../utils/DateUtils";
 */
 
 // Default function to be used in app.js
-// Returns an array holding 5 oneDay objects to be displayed to the user.
+// Returns an array holding 5 objects to be displayed to the user.
 export default function fiveDayForecast(data, units, timezoneOffset = 0) {
   let forecast = []; //initialize array
 
@@ -39,7 +39,8 @@ export default function fiveDayForecast(data, units, timezoneOffset = 0) {
   for (let key of keys) {
     let daySamples = groups[key] || [];
     let f = new Forecast(daySamples, timezoneOffset);
-    f.setLabel(key); // "2024-02-04"; // we're still no quite sure how to articulate the importance of this label, but it is used in the UI to display the date.
+    f.setLabel(key); // "2024-02-04"; 
+    // we're still no quite sure how to articulate the importance of this label, but it is used in the UI to display the date.
 
     forecast.push(f);
   }

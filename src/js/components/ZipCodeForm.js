@@ -1,5 +1,4 @@
 
-
 let previousListener = null;
 
 export default function ZipCodeForm({ onSubmit, zipcode }) {

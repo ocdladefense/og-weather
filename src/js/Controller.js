@@ -1,6 +1,5 @@
 
 import fiveDayForecast from "./api/openweathermap/fiveDayForecast";
-import currentWeather from "./api/openweathermap/currentWeather";
 
 import App from "./components/App";
 import Geolocation from "./services/Geolocation";
@@ -50,11 +49,9 @@ export default class Controller {
 
       // Assume the customer has chosen a 5-day forecast.
       // The product may have other options (10-day forecast, 30-day forecast, etc.).
-
       let forecast = fiveDayForecast(data, units, timezoneOffset);
-      //let currentWeather = currentWeather(rawWeather);
 
-      this.render(forecast, currentWeather, null, units, zipcode, city);
+      this.render(forecast, currentWeather, units, zipcode, city);
     }; 
 
     if(getState("zipcode") !== zipcode) {

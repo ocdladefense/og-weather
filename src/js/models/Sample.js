@@ -26,7 +26,7 @@ export default class Sample {
     feelsLike;
 
 
-    constructor(data, timezoneOffset = 0){
+    constructor(data){
         this.#data = data;
     }
 
@@ -103,7 +103,7 @@ export default class Sample {
         sample.pressure = data.main.pressure ?? null;
         sample.description = data.weather?.[0]?.description ?? "";
         sample.icon = data.weather?.[0]?.icon ?? "";
-        sample.feelsLike = data.feels_like ?? null;
+        sample.feelsLike = data.main.feels_like ?? null;
 
 
         return sample;

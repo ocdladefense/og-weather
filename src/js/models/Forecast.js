@@ -16,7 +16,6 @@ export default class Forecast {
 
     this.samples = samples.map(s => s instanceof Sample ? s : Sample.fromOpenWeatherMap(s, timezoneOffset));
 
-    //this.units = units;
   }
 
 
@@ -136,9 +135,16 @@ export default class Forecast {
     return noonEntry.getDescription();
   }
 
-  getFeelsLike(){
+  getFeelsLike(units){
+
+    let tempUnits = units === "metric" ? "°C" : "°F";
+
     let noonEntry = this.findSampleAtHourApprox(12)[1];
-    return noonEntry.getFeelsLike();
+    let feelsLike = noonEntry.getFeelsLike();
+
+    return `${Math.round(feelsLike)} ${tempUnits}`;
+
+ 
   }
 
 

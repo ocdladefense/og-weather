@@ -1,4 +1,3 @@
-import DateUtils from "../utils/DateUtils";
 import Forecast from "../models/Forecast";
 import WeatherConditionIcon from "./WeatherConditionIcon";
 
@@ -24,6 +23,8 @@ export default function ForecastItem(day, units, onItemClick, index) {
   // The icon is a small image that represents the weather condition for the day.
   // It uses the WeatherConditionIcon component to render the icon based on the weather condition.
   // The icon is displayed next to the label.
+
+  //TODO: Implement changing icon size
   let icon = WeatherConditionIcon({day: day, size: "small"});
 
   let high = document.createElement("span");
