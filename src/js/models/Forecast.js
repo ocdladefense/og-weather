@@ -136,15 +136,14 @@ export default class Forecast {
   }
 
   getFeelsLike(units){
+    let tempUnits = units === "metric" ? "celsius" : "fahrenheit"; 
 
-    let tempUnits = units === "metric" ? "°C" : "°F";
 
     let noonEntry = this.findSampleAtHourApprox(12)[1];
-    let feelsLike = noonEntry.getFeelsLike();
 
-    return `${Math.round(feelsLike)} ${tempUnits}`;
+    let convertedTemp = Forecast.convertTemperature(noonEntry.getTemperature(), noonEntry.getTempUnits(), tempUnits);
 
- 
+    return Math.round(convertedTemp);
   }
 
 

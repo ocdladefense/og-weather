@@ -1,4 +1,6 @@
 import WeatherConditionIcon from "./WeatherConditionIcon";
+import Forecast from "../models/Forecast";
+
 
 export default function CurrentWeather(day, units) {
   if (!day) return document.createElement("div");
@@ -15,10 +17,11 @@ export default function CurrentWeather(day, units) {
   description.textContent = day.getDescription(); 
 
   let temp = document.createElement("p");
-  temp.textContent = `Temp: ${day.getTemperature()}°`;
+  let symbol = Forecast.getUnitOfMeasureSymbol(units, "temperature");
+  temp.textContent = `Temp: ${Math.round(day.getTemperature())}${symbol}`;
 
   let feels = document.createElement("p");
-  feels.textContent = `Feels like: ${day.getFeelsLike(units)}`;
+  feels.textContent = `Feels like: ${Math.round(day.getFeelsLike(units))}${symbol}`;
 
   let humidity = document.createElement("p");
   humidity.textContent = `Humidity: ${day.getHumidity()}%`;
