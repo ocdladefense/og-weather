@@ -18,7 +18,6 @@ export default class DateUtils extends Date {
 
   // takes in a date object, not a string
   static _getWeekday(date) {
-    console.log(date);
 
     date = date instanceof DateUtils ? date : new DateUtils(date);
 

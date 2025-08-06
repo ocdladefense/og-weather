@@ -2,6 +2,7 @@ import WeatherDetails from "./WeatherDetails";
 import CurrentWeather from "./CurrentWeather";
 import Forecast from "./Forecast";  
 import ZipCodeForm from "./ZipCodeForm";
+import HourByHour from "./HourByHour";
 import {getState, renderComponent} from "./React";
 
 
@@ -22,6 +23,10 @@ import {getState, renderComponent} from "./React";
     // Render the current weather
     let currentWeatherDiv = CurrentWeather(currentWeather); 
     container.appendChild(currentWeatherDiv);
+
+     // Render the hour by hour forecast
+    let hourByHourDiv = HourByHour(forecast[0]); 
+    container.appendChild(hourByHourDiv);
 
     let theList = Forecast({forecast, units, rerender: () => {
       renderComponent(App, {forecast, currentWeather, units, onSubmit, zipcode, cityName});

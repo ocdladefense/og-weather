@@ -12,9 +12,11 @@ export default class Forecast {
 
 
   // i.e., the forecast for a single day, takes in a collection of samples.
-  constructor(samples, timezoneOffset) {
+  constructor(samples, units, timezoneOffset) {
 
-    this.samples = samples.map(s => s instanceof Sample ? s : Sample.fromOpenWeatherMap(s, timezoneOffset));
+    this.samples = samples.map(s => s instanceof Sample ? s : Sample.fromOpenWeatherMap(s, units, timezoneOffset));
+
+    console.log(timezoneOffset);
 
   }
 
@@ -32,7 +34,18 @@ export default class Forecast {
     return DateUtils._getWeekday(this.label);
   }
 
-
+  static formatHourAs12Hour(hour){
+    if(hour < 12){
+      return `${hour}AM`
+    }
+    else if (hour == 12){
+      return `${hour}PM`
+    }
+    else {
+      hour = hour - 12;
+      return `${hour}PM`
+    }
+  }
 
   
   static convertTemperature(temp, unitsFrom, unitsTo) {
