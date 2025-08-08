@@ -17,15 +17,18 @@ export default function HourByHour(forecast, units) {
   let item = document.createElement("div");
 
   let samples = forecast.samples;
+  console.log(forecast);
+  
 
   samples.forEach((s) => {
     let symbol = Forecast.getUnitOfMeasureSymbol(units, "temperature");
 
     let time = document.createElement("span");
-    
-    console.log(s.getDateTime());
-    console.log("Sample time:", s.getDateTime().toString());
-    console.log("Raw dt:", s.getData().dt, " Offset:", forecast.timezoneOffset);
+
+    let data = s.getData();
+    console.log("Sample time:", s.getDateTime());
+    console.log("Data:", data);
+
 
     time.textContent = Forecast.formatHourAs12Hour(s.getDateTime().getHours()) + " ";
     item.appendChild(time);

@@ -16,8 +16,6 @@ export default class Forecast {
 
     this.samples = samples.map(s => s instanceof Sample ? s : Sample.fromOpenWeatherMap(s, units, timezoneOffset));
 
-    console.log(timezoneOffset);
-
   }
 
 

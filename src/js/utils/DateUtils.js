@@ -79,4 +79,31 @@ export default class DateUtils extends Date {
 
     return [month,day].join("/");
   }
+
+  // Converts the date to a DateUtils object with ISO string in correct offset
+  static toTimezoneOffset(date, timezoneOffset) {
+    let pad = (num) => String(num).padStart(2, '0');
+
+    // The `Date` object already handles the UTC to local conversion
+    // when you create it from a timestamp.
+    let year = date.getFullYear();
+    let month = pad(date.getMonth() + 1);
+    let day = pad(date.getDate());
+    let hours = pad(date.getHours());
+    let minutes = pad(date.getMinutes());
+    let seconds = pad(date.getSeconds());
+    let ms = String(date.getMilliseconds()).padStart(3, '0');
+
+    // The offset is for formatting only.
+    let sign = timezoneOffset >= 0 ? '+' : '-';
+    let absOffset = Math.abs(timezoneOffset);
+    let offsetHours = pad(Math.floor(absOffset / 3600));
+    let offsetMinutes = pad((absOffset % 3600) / 60);
+
+    let ISOString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${ms}${sign}${offsetHours}:${offsetMinutes}`;
+
+    return new DateUtils(ISOString);
+  }
+
 }
+

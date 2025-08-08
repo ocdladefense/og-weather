@@ -12,9 +12,11 @@ import DateUtils from "../../utils/DateUtils";
 // Default function to be used in app.js
 // Returns an array holding 5 objects to be displayed to the user.
 export default function fiveDayForecast(data, units, timezoneOffset = 0) {
+
   let forecast = []; //initialize array
 
   let samples = new SampleCollection(data, units, timezoneOffset);
+
   let groups = samples.groupBy("date");
 
   const NUMBER_OF_DAYS = 5;
@@ -22,7 +24,8 @@ export default function fiveDayForecast(data, units, timezoneOffset = 0) {
 
   let localDate = new Date();
   console.log(timezoneOffset);
-  console.log(localDate);
+  // console.log(localDate);
+
   // const timezoneOffseet = 28800; // seconds for Hong Kong
   // const localHKTime = new Date(Date.now() + timezoneOffseet * 1000);
 

@@ -43,6 +43,7 @@ export default class Controller {
       // lat = 22.27832;
       // lng = 114.17469;
       let { data, timezoneOffset } = await forecastService.load(lat,lng,units);
+      
 
       // Get the current weather using the appropriate endpoint from the OpenWeatherMap API.
       let currentWeather  = await currentWeatherService.load(lat, lng, units);
@@ -50,6 +51,7 @@ export default class Controller {
       // Assume the customer has chosen a 5-day forecast.
       // The product may have other options (10-day forecast, 30-day forecast, etc.).
       let forecast = fiveDayForecast(data, units, timezoneOffset);
+
 
       this.render(forecast, currentWeather, units, zipcode, city);
     }; 
