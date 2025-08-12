@@ -25,7 +25,7 @@ export default function ForecastItem(day, units, onItemClick, index) {
   // The icon is displayed next to the label.
 
   //TODO: Implement changing icon size
-  let icon = WeatherConditionIcon({day: day, size: "small"});
+  let icon = WeatherConditionIcon({src: day.getIcon(), alt: day.getDescription(), size: "small"});
 
   let high = document.createElement("span");
   high.setAttribute("class", "high");

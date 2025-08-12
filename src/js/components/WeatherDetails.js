@@ -19,7 +19,7 @@ import Forecast from "../models/Forecast";
     // Description with img Icon paragraph
     let pDesc = document.createElement("p");
     pDesc.textContent = day.getDescription() + " ";
-    let icon = WeatherConditionIcon({day: day, size: "large"});
+    let icon = WeatherConditionIcon({src: day.getIcon(), alt: day.getDescription(), size: "large"});
     pDesc.appendChild(icon);
     dayDiv.appendChild(pDesc);
 

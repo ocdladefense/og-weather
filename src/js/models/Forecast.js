@@ -13,7 +13,10 @@ export default class Forecast {
 
   // i.e., the forecast for a single day, takes in a collection of samples.
   constructor(samples, units, timezoneOffset) {
-
+    if (!samples || samples.length === 0) {
+      throw new Error("No sample found");
+    }
+    
     this.samples = samples.map(s => s instanceof Sample ? s : Sample.fromOpenWeatherMap(s, units, timezoneOffset));
 
   }
@@ -61,15 +64,16 @@ export default class Forecast {
   // Function that finds the closest hour match, because a match isn't always gonna be there since data is only given every 3 hours.
   findSampleAtHourApprox(hour, units = "imperial") {
     // let unitsLabel = units === "metric" ? "°C" : "°F";
-      if (!this.samples || this.samples.length === 0) {
-    console.warn("No samples available in Forecast");
-    return null;
-  }
+    if (!this.samples || this.samples.length === 0) {
+      console.warn("No samples available in Forecast");
+      return null;
+    }
+
     let diffs = this.samples.map((sample) => {
       let localHour = sample.getLocalHour().getHours();
       return [Math.abs(localHour - hour), sample];
     });
-   
+
     diffs.sort((a,b) => a[0] - b[0]);
 
     let [diff, sample] = diffs[0];

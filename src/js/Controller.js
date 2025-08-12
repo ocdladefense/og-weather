@@ -46,7 +46,7 @@ export default class Controller {
       
 
       // Get the current weather using the appropriate endpoint from the OpenWeatherMap API.
-      let currentWeather  = await currentWeatherService.load(lat, lng, units);
+      let currentWeather  = await currentWeatherService.load(lat, lng);
 
       // Assume the customer has chosen a 5-day forecast.
       // The product may have other options (10-day forecast, 30-day forecast, etc.).

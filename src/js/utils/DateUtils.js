@@ -38,7 +38,7 @@ export default class DateUtils extends Date {
 
 
   // Function that converts a js date object into a string.
-  toString() {
+  toLabel() {
     let year = this.getFullYear();
     let month = String(this.getMonth() + 1).padStart(2, "0");
     let day = String(this.getDate()).padStart(2, "0");
@@ -80,29 +80,48 @@ export default class DateUtils extends Date {
     return [month,day].join("/");
   }
 
+  // // Converts the date to a DateUtils object with ISO string in correct offset
+  // static toTimezoneOffset(date, timezoneOffset) {
+  //   let pad = (num) => String(num).padStart(2, '0');
+
+  //   // The `Date` object already handles the UTC to local conversion
+  //   // when you create it from a timestamp.
+  //   let year = date.getFullYear();
+  //   let month = pad(date.getMonth() + 1);
+  //   let day = pad(date.getDate());
+  //   let hours = pad(date.getHours());
+  //   let minutes = pad(date.getMinutes());
+  //   let seconds = pad(date.getSeconds());
+  //   let ms = String(date.getMilliseconds()).padStart(3, '0');
+
+  //   // The offset is for formatting only.
+  //   let sign = timezoneOffset >= 0 ? '+' : '-';
+  //   let absOffset = Math.abs(timezoneOffset);
+  //   let offsetHours = pad(Math.floor(absOffset / 3600));
+  //   let offsetMinutes = pad((absOffset % 3600) / 60);
+
+  //   let ISOString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${ms}${sign}${offsetHours}:${offsetMinutes}`;
+
+  //   return new DateUtils(ISOString);
+  // }
+
   // Converts the date to a DateUtils object with ISO string in correct offset
-  static toTimezoneOffset(date, timezoneOffset) {
-    let pad = (num) => String(num).padStart(2, '0');
+  toTimezoneOffset(timezoneOffset) {    
 
-    // The `Date` object already handles the UTC to local conversion
-    // when you create it from a timestamp.
-    let year = date.getFullYear();
-    let month = pad(date.getMonth() + 1);
-    let day = pad(date.getDate());
-    let hours = pad(date.getHours());
-    let minutes = pad(date.getMinutes());
-    let seconds = pad(date.getSeconds());
-    let ms = String(date.getMilliseconds()).padStart(3, '0');
+    let offsetInSeconds = this.getTimezoneOffset() * 60;
 
-    // The offset is for formatting only.
-    let sign = timezoneOffset >= 0 ? '+' : '-';
-    let absOffset = Math.abs(timezoneOffset);
-    let offsetHours = pad(Math.floor(absOffset / 3600));
-    let offsetMinutes = pad((absOffset % 3600) / 60);
+    let shouldConvert = ((timezoneOffset * -1) != offsetInSeconds);
+    if (!shouldConvert) {
+      return this;
+    }
 
-    let ISOString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${ms}${sign}${offsetHours}:${offsetMinutes}`;
+    let unixTimestampInMS = this.getTime();
 
-    return new DateUtils(ISOString);
+    let offsetInMs = timezoneOffset * 1000;
+
+    let localTimeMs = unixTimestampInMS - offsetInMs; // Subtract because offset is minutes to *add* to local to get UTC
+
+    return new DateUtils(localTimeMs);
   }
 
 }

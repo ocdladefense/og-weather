@@ -1,9 +1,9 @@
 
-export default function WeatherConditionIcon({day}) {
+export default function WeatherConditionIcon({src, alt, size = "small"}) {
 
     let img = document.createElement("img");
-    img.src = `http://openweathermap.org/img/w/${day.getIcon()}.png`;
-    img.alt = day.getDescription();
+    img.src = `http://openweathermap.org/img/w/${src}.png`;
+    img.alt = alt;
 
 
     return img;

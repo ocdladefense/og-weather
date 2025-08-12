@@ -20,29 +20,19 @@ export default function fiveDayForecast(data, units, timezoneOffset = 0) {
   let groups = samples.groupBy("date");
 
   const NUMBER_OF_DAYS = 5;
-  // TODO: pass in current date time with respect to timezone offset.
 
   let localDate = new Date();
-  console.log(timezoneOffset);
-  // console.log(localDate);
-
-  // const timezoneOffseet = 28800; // seconds for Hong Kong
-  // const localHKTime = new Date(Date.now() + timezoneOffseet * 1000);
-
-  // console.log("Local Hong Kong Time:", localHKTime); 
-
-  // console.log("Offset (sec):", timezoneOffset);
-  // console.log("Local date:", localDate.toString());
 
   let range = DateUtils.createRange(localDate, NUMBER_OF_DAYS);
 
   let keys = range.map((date) => {
-    return date.toString();
+    return date.toLabel();
   });
 
   // Iterates through each dateKey
   for (let key of keys) {
     let daySamples = groups[key] || [];
+    
     let f = new Forecast(daySamples, units, timezoneOffset);
     f.setLabel(key); // "2024-02-04"; 
     // we're still no quite sure how to articulate the importance of this label, but it is used in the UI to display the date.

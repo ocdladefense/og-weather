@@ -52,6 +52,7 @@ body {
   background-color: #fff;
   text-align: center;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
   .weather-list-item :first-child {
@@ -73,6 +74,7 @@ body {
   border: 2px solid #000;
   border-radius: 20px;
   background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .details {
@@ -110,7 +112,7 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.sample-collection {
+.sample-collection-title {
   max-width: 600px;
   margin: 20px auto;
   padding: 20px;
@@ -119,4 +121,10 @@ body {
   background-color: #fff;
   text-align: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.sample-collection {
+  margin: 20px auto;
+  padding: 20px;
+  text-align: center;
 }

@@ -21,7 +21,7 @@ import {getState, renderComponent} from "./React";
     container.appendChild(form);
 
     // Render the current weather
-    let currentWeatherDiv = CurrentWeather(currentWeather); 
+    let currentWeatherDiv = CurrentWeather({sample: currentWeather, units}); 
     container.appendChild(currentWeatherDiv);
 
      // Render the hour by hour forecast

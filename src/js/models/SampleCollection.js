@@ -36,7 +36,7 @@ export default class SampleCollection {
     return Object.groupBy(this.#samples, (sample) => {
       let d = sample.getDateTime();
 
-      return d.toString();
+      return d.toLabel();
     });
   }
 }

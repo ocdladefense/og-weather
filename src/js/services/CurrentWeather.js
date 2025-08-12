@@ -12,7 +12,7 @@ export default class CurrentWeatherService {
     
     // Wrap raw weather data in Sample
     // Be sure to call fromOpenWeatherMap to populate the data.
-    return Sample.fromOpenWeatherMap(data, "imperial", data.main.timezoneoffset);
+    return Sample.fromOpenWeatherMap(data, "imperial", data.timezone);
 
   }
 }
