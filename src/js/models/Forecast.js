@@ -37,14 +37,14 @@ export default class Forecast {
 
   static formatHourAs12Hour(hour){
     if(hour < 12){
-      return `${hour}AM`
+      return `${hour} AM`
     }
     else if (hour == 12){
-      return `${hour}PM`
+      return `${hour} PM`
     }
     else {
       hour = hour - 12;
-      return `${hour}PM`
+      return `${hour} PM`
     }
   }
 
@@ -148,6 +148,11 @@ export default class Forecast {
   getDescription() {
     let noonEntry = this.findSampleAtHourApprox(12)[1];
     return noonEntry.getDescription();
+  }
+
+  getCity() {
+    let noonEntry = this.findSampleAtHourApprox(12)[1];
+    return noonEntry.getCity();
   }
 
   getFeelsLike(units){

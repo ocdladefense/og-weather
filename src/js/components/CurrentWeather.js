@@ -10,7 +10,8 @@ export default function CurrentWeather({sample, units}) {
   div.setAttribute("class", "current-weather");
 
   let city = document.createElement("h2");
-  city.textContent = sample.city || "Current Weather";
+  let cityName = sample.getCity();
+  city.textContent = "Current Weather in " + cityName || "Current Weather";
 
   let icon = WeatherConditionIcon({src: sample.getIcon(), alt: sample.getDescription(), size: "large"});
   

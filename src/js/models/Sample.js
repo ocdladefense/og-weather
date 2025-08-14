@@ -25,6 +25,8 @@ export default class Sample {
     
     feelsLike;
 
+    city;
+
 
     constructor(data){
         this.#data = data;
@@ -92,6 +94,10 @@ export default class Sample {
         return this.windUnits;
     }
 
+    getCity() {
+        return this.city;
+    }
+
     static fromOpenWeatherMap(data, units = "standard", timezoneOffset = 0){
         let sample = new Sample(data, timezoneOffset);
         const utcDate = new DateUtils(data.dt * 1000);  // base UTC date in ms
@@ -105,6 +111,7 @@ export default class Sample {
         sample.description = data.weather?.[0]?.description ?? "";
         sample.icon = data.weather?.[0]?.icon ?? "";
         sample.feelsLike = data.main.feels_like ?? null;
+        sample.city = data.name ?? null;
 
 
         return sample;

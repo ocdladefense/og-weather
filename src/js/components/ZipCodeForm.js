@@ -27,7 +27,7 @@ export default function ZipCodeForm({ onSubmit, zipcode }) {
     let button = document.createElement("button");
     button.setAttribute("type", "submit");
     button.setAttribute("class", "btn");
-    button.textContent = "Get the forcast!";
+    button.textContent = "Get the forecast!";
 
     
     flex.appendChild(label);
