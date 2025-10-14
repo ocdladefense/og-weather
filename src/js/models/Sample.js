@@ -1,0 +1,119 @@
+import DateUtils from "../utils/DateUtils";
+
+
+export default class Sample {
+
+    #data;
+
+    tempUnits;
+
+    windUnits;
+
+    #date;
+
+    temp;
+
+    wind;
+
+    humidity;
+
+    pressure;
+
+    description;
+
+    icon;
+    
+    feelsLike;
+
+    city;
+
+
+    constructor(data){
+        this.#data = data;
+    }
+
+    getData() {
+        return this.#data;
+    }
+
+    getDateTime(){
+        return this.#date;
+    }
+
+    setDateTime(date) {
+        this.#date = new DateUtils(date);
+    }
+
+    getLocalHour() {
+        return this.#date;
+    }
+    
+    getTemperature(){
+        return this.temp;
+    }
+
+    setTemperature(temp, tempUnits = "F") {
+        this.temp = temp;
+        this.tempUnits = tempUnits;
+    }
+
+    getWind() {
+        return this.wind;
+    }
+
+    setWind(wind, windUnits = "mph") {
+        this.wind = wind;
+        this.windUnits = windUnits;
+    }
+
+    getHumidity() {
+        return this.humidity;
+    }
+
+    getPressure(){
+        return this.pressure;
+    }
+
+    getDescription(){
+        return this.description;
+    }
+
+    getFeelsLike(){
+        return this.feelsLike;
+    }
+
+    getIcon(){
+        return this.icon;
+    }
+
+    getTempUnits() {
+        return this.tempUnits;
+    }
+
+    getWindUnits() {
+        return this.windUnits;
+    }
+
+    getCity() {
+        return this.city;
+    }
+
+    static fromOpenWeatherMap(data, units = "standard", timezoneOffset = 0){
+        let sample = new Sample(data, timezoneOffset);
+        const utcDate = new DateUtils(data.dt * 1000);  // base UTC date in ms
+        sample.#date = utcDate.toTimezoneOffset(timezoneOffset);
+        sample.tempUnits = units == "metric" ? "celsius" : "fahrenheit"; 
+        sample.windUnits = units == "metric" ? "m/s" : "mph"; 
+        sample.temp = data.main.temp ?? null;
+        sample.wind = data.wind.speed ?? null;
+        sample.humidity = data.main.humidity ?? null;
+        sample.pressure = data.main.pressure ?? null;
+        sample.description = data.weather?.[0]?.description ?? "";
+        sample.icon = data.weather?.[0]?.icon ?? "";
+        sample.feelsLike = data.main.feels_like ?? null;
+        sample.city = data.name ?? null;
+
+
+        return sample;
+    }
+}
