@@ -1,12 +1,13 @@
 
 import fiveDayForecast from "./api/openweathermap/fiveDayForecast";
-
 import App from "./components/App";
 import Geolocation from "./services/Geolocation";
 import Forecast from "./services/Forecast";
 import CurrentWeatherService from "./services/CurrentWeather";
-
 import {renderComponent, getState, setState} from "./components/React";
+
+ 
+
 
 
 
@@ -14,16 +15,9 @@ import {renderComponent, getState, setState} from "./components/React";
 export default class Controller {
 
   
-  constructor() {
-    this.state = {
-      timezoneOffset: 0,
-      zipcode: "",
-      forecast: [],
-      currentWeather: null,
-      selectedDate: null,
-    };
+  constructor() {}
 
-  }
+
 
   // Gets called on the first render, and every time the user submits a new zipcode.
   render(forecast = [], currentWeather = null, units, zipcode = "", cityName = "") {
