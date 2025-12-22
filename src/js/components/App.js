@@ -1,14 +1,59 @@
+import { getState, setState, useState } from "../utils/React";
+import Geolocation from "../services/Geolocation";
+import Forecast from "../services/Forecast";
+import CurrentWeatherService from "../services/CurrentWeather";  
 import WeatherDetails from "./WeatherDetails";
 import CurrentWeather from "./CurrentWeather";
-import Forecast from "./Forecast";  
+import ForecastComponent from "./Forecast";  
 import ZipCodeForm from "./ZipCodeForm";
 import HourByHour from "./HourByHour";
-import {getState, renderComponent} from "./React";
+import fiveDayForecast from "../api/openweathermap/fiveDayForecast";
 
 
 
 
-  export default function App({ forecast, currentWeather, units, onSubmit, zipcode, cityName }) {
+
+
+  export default function App() {
+
+
+    let forecast = useState("forecast", []);
+    let currentWeather = useState("currentWeather", null);
+    let units = useState("units", "imperial");
+    let zipcode = useState("zipcode", "");
+    let cityName = useState("cityName", "");
+
+
+    let onSubmit = async (e) => {
+      e.preventDefault();
+      // use e.target.zipcode.value to get the zipcode from the form.
+      let zipcode = e.target.zipcode.value;
+      setState("zipcode", zipcode);
+
+      let geolocationService = new Geolocation();
+      let forecastService = new Forecast();
+      let currentWeatherService = new CurrentWeatherService();
+
+      // let units = "imperial"; // or "metric", depending on your preference
+
+
+      let { city, lat, lng } = await geolocationService.load(zipcode);
+      setState("cityName", city);
+      let { data, timezoneOffset } = await forecastService.load(lat,lng,units);
+      
+
+      // Get the current weather using the appropriate endpoint from the OpenWeatherMap API.
+      let currentWeather  = await currentWeatherService.load(lat, lng);
+      setState("currentWeather", currentWeather);
+      // Assume the customer has chosen a 5-day forecast.
+      // The product may have other options (10-day forecast, 30-day forecast, etc.).
+      setState("forecast", fiveDayForecast(data, units, timezoneOffset));
+    }; 
+
+    if(getState("zipcode") !== zipcode) {
+      setState("zipcode", zipcode);
+    }
+
 
 
     let selectedDayIndex = getState("selectedDayIndex");
@@ -20,17 +65,15 @@ import {getState, renderComponent} from "./React";
     let form = ZipCodeForm({onSubmit, zipcode});
     container.appendChild(form);
 
-    // Render the current weather
+    // Render the current weather.
     let currentWeatherDiv = CurrentWeather({sample: currentWeather, units}); 
     container.appendChild(currentWeatherDiv);
 
-     // Render the hour by hour forecast
+     // Render the hour by hour forecast.
     let hourByHourDiv = HourByHour(forecast[0]); 
     container.appendChild(hourByHourDiv);
 
-    let theList = Forecast({forecast, units, rerender: () => {
-      renderComponent(App, {forecast, currentWeather, units, onSubmit, zipcode, cityName});
-    }});
+    let theList = ForecastComponent({forecast, units});
     container.appendChild(theList);
 
 
