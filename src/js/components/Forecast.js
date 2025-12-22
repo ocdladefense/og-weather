@@ -1,5 +1,5 @@
 import ForecastItem from "./ForecastItem"
-import {setState} from "./React";
+import {setState} from "../utils/React";
 
  // Render the entire weather list
  export default function Forecast({forecast, units, rerender}) {
@@ -7,7 +7,6 @@ import {setState} from "./React";
     let onItemClick = (e) => {
       let selectedDayIndex = e.currentTarget.dataset.index;
       setState("selectedDayIndex", selectedDayIndex);
-      rerender();
     };
 
     let listDiv = document.createElement("div");
