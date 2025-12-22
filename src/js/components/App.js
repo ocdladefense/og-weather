@@ -39,8 +39,6 @@ import fiveDayForecast from "../api/openweathermap/fiveDayForecast";
 
       let { city, lat, lng } = await geolocationService.load(zipcode);
       setState("cityName", city);
-      // lat = 22.27832;
-      // lng = 114.17469;
       let { data, timezoneOffset } = await forecastService.load(lat,lng,units);
       
 
@@ -50,9 +48,6 @@ import fiveDayForecast from "../api/openweathermap/fiveDayForecast";
       // Assume the customer has chosen a 5-day forecast.
       // The product may have other options (10-day forecast, 30-day forecast, etc.).
       setState("forecast", fiveDayForecast(data, units, timezoneOffset));
-
-
-      // this.render(ForecastComponent, currentWeather, units, zipcode, city);
     }; 
 
     if(getState("zipcode") !== zipcode) {
