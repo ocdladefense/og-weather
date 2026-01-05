@@ -26,6 +26,8 @@
   "dependencies": {
     "bootstrap": "^5.2.1",
     "bootstrap-less": "^3.3.8",
-    "less": "^4.1.1"
+    "less": "^4.1.1",
+    "react": "npm:@ocdla/view@~5.2.0",
+    "react-dom": "npm:@ocdla/view-dom@~2.0.0"
   }
 }

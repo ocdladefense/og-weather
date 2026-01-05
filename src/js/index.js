@@ -1,4 +1,4 @@
-import { createRoot } from "./utils/React";
+import { createRoot } from "react-dom";
 import bootstrap from "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/styles.scss";
